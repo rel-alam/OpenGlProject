@@ -7,16 +7,12 @@
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
 
-#include "CameraAndProjection.h"
-
-
-
-
+#include "RenderingGeometry.h"
 
 int main()
 {
 
-	CameraAndProjection app;
+	RenderingGeometry app;
 
 	if (app.startup() == false)
 	{

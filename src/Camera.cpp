@@ -3,8 +3,10 @@
 
 Camera::Camera()
 {
-
+	m_sensitivity = 5;
 }
+
+
 
 Camera::~Camera()
 {
@@ -18,6 +20,7 @@ void Camera::setPrespective(float fov, float aspect, float near, float far)
 void Camera::setLookAt(vec3 from, vec3 to, vec3 up)
 {
 	m_view = glm::lookAt(from, to, up);
+	m_world = glm::inverse(m_view);
 }
 
 void Camera::setPosition(vec3 Position)
@@ -42,7 +45,7 @@ mat4 Camera::getProjection()
 }
 mat4 Camera::getProjectionView()
 {
-	return m_projView;
+	return m_proj * m_view;
 }
 
 void Camera::updateProjectionViewTransform()
@@ -53,6 +56,7 @@ void Camera::updateProjectionViewTransform()
 
 bool FlyCamera::update(float a_deltaTime)
 {
+	m_speed = 5;
 	if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_W) == GLFW_PRESS)
 	{
 		m_world[3] -= m_world[2] * m_speed * a_deltaTime;
@@ -85,14 +89,16 @@ bool FlyCamera::update(float a_deltaTime)
 	GLFWwindow* window = glfwGetCurrentContext();
 	double x_delta, y_delta;
 	glfwGetCursorPos(window, &x_delta, &y_delta);
-	glfwSetCursorPos(window, 1200.f / 2.f, 720.f / 2.f);
-	
+	glfwSetCursorPos(window, 1280.f / 2.f, 720.f / 2.f);
 	x_delta -= (1280.f / 2.f);
 	y_delta -= (720.f / 2.f);
 
 	x_delta /= (1280.f / 2.f);
 	y_delta /= (720.f / 2.f);
 
+	x_delta = x_delta * -m_sensitivity;
+	y_delta = y_delta * -m_sensitivity;
+	
 	if (glfwGetMouseButton(window, 1))
 	{
 
@@ -108,6 +114,8 @@ bool FlyCamera::update(float a_deltaTime)
 
 	}
 
+	m_world[3][3] = 1;
+	m_proj = glm::perspective(glm::radians(60.f), 1280.f/720.f, 0.1f, 1000.f);
 	m_view = glm::inverse(m_world);
 
 	updateProjectionViewTransform();

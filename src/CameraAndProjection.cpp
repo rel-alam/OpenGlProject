@@ -21,7 +21,7 @@ bool CameraAndProjection::startup()
 Gizmos::create();
 
 camera = new FlyCamera();
-camera->setLookAt(vec3(0, 10, 0), vec3(0, 0, 0), vec3(0, 1, 0));
+camera->setLookAt(vec3(10, 10, 10), vec3(0, 0, 0), vec3(0, 1, 0));
 camera->setSpeed(1);
 camera->setPrespective(60, 1280 / 720, 0.1f, 1000.f);
 	return true;
@@ -56,15 +56,16 @@ bool CameraAndProjection::update()
 		Gizmos::addLine(vec3(-10 + i, 0, -10), vec3(-10 + i, 0, 10), i == 10 ? white : black);
 		Gizmos::addLine(vec3(-10, 0, -10 + i), vec3(10, 0, -10 + i), i == 10 ? white : black);
 	}
-	
+
 	return true;
 }
 
 void CameraAndProjection::draw()
 {
-
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
 	Gizmos::draw(camera->getProjectionView());
+	
 	glfwSwapBuffers(m_window);
 	glfwPollEvents();
 }

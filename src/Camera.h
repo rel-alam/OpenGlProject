@@ -26,13 +26,14 @@ public:
 	mat4 getProjection();
 	mat4 getProjectionView();
 
-	void updateProjectionViewTransform();
+	void updateProjectionViewTransform();
+
 
 	mat4 m_world;
 	mat4 m_view;
 	mat4 m_proj;
 	mat4 m_projView;
-
+	float m_sensitivity;
 };
 
 class FlyCamera : public Camera
@@ -43,6 +44,7 @@ public:
 
 private:
 	float m_speed;
+	
 	vec3 m_up;
 };
 
