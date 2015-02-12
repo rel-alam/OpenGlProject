@@ -7,12 +7,12 @@
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
 
-#include "Texturing.h"
+#include "Lighting.h"
 
 int main()
 {
 
-	Texturing app;
+	Lighting app;
 
 	if (app.startup() == false)
 	{
