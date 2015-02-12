@@ -75,6 +75,9 @@
     <ClInclude Include="src\Lighting.h">
       <Filter>Lighting</Filter>
     </ClInclude>
+    <ClInclude Include="src\tiny_obj_loader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gl_core_4_4.c">
@@ -109,6 +112,9 @@
     </ClCompile>
     <ClCompile Include="src\Lighting.cpp">
       <Filter>Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tiny_obj_loader.cc">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
