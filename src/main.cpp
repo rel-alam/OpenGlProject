@@ -7,12 +7,12 @@
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
 
-#include "RenderingGeometry.h"
+#include "Texturing.h"
 
 int main()
 {
 
-	RenderingGeometry app;
+	Texturing app;
 
 	if (app.startup() == false)
 	{

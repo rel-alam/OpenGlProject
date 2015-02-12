@@ -22,6 +22,12 @@
     <Filter Include="RenderingGeometry">
       <UniqueIdentifier>{904dd896-2120-43e7-8781-6f0cbc67e57b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\shaders">
+      <UniqueIdentifier>{4c0fa3b6-5a2b-4837-b12d-43993e5e0392}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Texturing">
+      <UniqueIdentifier>{88082d00-5cf8-45df-8466-098a3ae6d7ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\gl_core_4_4.h">
@@ -54,6 +60,12 @@
     <ClInclude Include="src\Utility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Texturing.h">
+      <Filter>Texturing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gl_core_4_4.c">
@@ -83,5 +95,22 @@
     <ClCompile Include="src\Ultility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Texturing.cpp">
+      <Filter>Texturing</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\shaders\basic_vertex.glsl">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="data\shaders\basic_fragment.glsl">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="data\shaders\textured_vertex.glsl">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="data\shaders\textured_fragment.glsl">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

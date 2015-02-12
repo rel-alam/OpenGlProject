@@ -13,7 +13,7 @@ public:
 	virtual void draw();
 
 	void generateGrid(unsigned int rows, unsigned int cols);
-	void generateShader();
+	//void generateShader();
 
 	unsigned int m_program_id;
 	unsigned int m_index_count;

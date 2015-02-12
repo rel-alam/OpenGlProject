@@ -3,6 +3,7 @@
 #include "Vertex.h"
 #include "gl_core_4_4.h"
 #include <GLFW\glfw3.h>
+#include "Utility.h"
 bool RenderingGeometry::startup()
 {
 	if (Application::startup() == false)
@@ -10,8 +11,11 @@ bool RenderingGeometry::startup()
 		return false;
 	}
 
-	generateShader();
+	//generateShader();
 	generateGrid(10, 10);
+
+	LoadShader("./shaders/basic_vertex.glsl", "./shaders/basic_fragment.glsl", &m_program_id);
+
 
 	Gizmos::create();
 	m_camera = new FlyCamera();
@@ -169,78 +173,78 @@ void RenderingGeometry::generateGrid(unsigned int rows, unsigned int cols)
 }
 
 
-void RenderingGeometry::generateShader()
-{
-
-	const char* vs_source =	"#version 410\n"
-								"layout(location=0) in vec4 position;\n"
-								"layout(location=1) in vec4 color;\n"
-								"out vec4 out_color;\n"
-								"uniform mat4 projection_view;\n"
-								"uniform float timer;"
-								"uniform float heightScale;"
-								"void main()\n"
-								"{\n"
-									"out_color = color;\n"
-									"vec4 pos = position;"
-									"pos.y = (sin(pos.x* timer) + sin(pos.z * timer) * heightScale);"
-									"gl_Position = projection_view * pos;\n"
-								"}\n";
-
-	const char* fs_source = "#version 410\n \
-							in vec4 out_color;\n \
-							out vec4 frag_color;\n \
-							void main() { frag_color = out_color;}";
-
-
-	unsigned int vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-	unsigned int fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-
-	glShaderSource(vertex_shader, 1, &vs_source, 0);
-	glCompileShader(vertex_shader);
-
-	glShaderSource(fragment_shader, 1, &fs_source, 0);
-	glCompileShader(fragment_shader);
-	int success = GL_FALSE;
-	
-	glGetShaderiv(m_program_id, GL_COMPILE_STATUS, &success);
-	if (success == GL_FALSE)
-	{
-		int log_length = 0;
-		glGetShaderiv(m_program_id, GL_INFO_LOG_LENGTH, &log_length);
-		char* log = new char[log_length];
-		glGetProgramInfoLog(m_program_id, log_length, 0, log);
-
-		printf("Error: Stuff broke in Linker!");
-		printf("%s\n", log);
-
-		delete[] log;
-
-	}
-
-
-	m_program_id = glCreateProgram();
-	glAttachShader(m_program_id, vertex_shader);
-	glAttachShader(m_program_id, fragment_shader);
-	glLinkProgram(m_program_id);
-
-	
-	glGetProgramiv(m_program_id, GL_LINK_STATUS, &success);
-	
-	if (success == GL_FALSE)
-	{
-		int log_length = 0;
-		glGetProgramiv(m_program_id, GL_INFO_LOG_LENGTH, &log_length);
-		char* log = new char[log_length];
-		glGetProgramInfoLog(m_program_id, log_length, 0, log);
-
-		printf("Error: Stuff broke in shader!");
-		printf("%s\n", log);
-
-		delete[] log;
-
-	}
-
-	glDeleteShader(fragment_shader);
-	glDeleteShader(vertex_shader);
-}
+//void RenderingGeometry::generateShader()
+//{
+//
+//	const char* vs_source =	"#version 410\n"
+//								"layout(location=0) in vec4 position;\n"
+//								"layout(location=1) in vec4 color;\n"
+//								"out vec4 out_color;\n"
+//								"uniform mat4 projection_view;\n"
+//								"uniform float timer;"
+//								"uniform float heightScale;"
+//								"void main()\n"
+//								"{\n"
+//									"out_color = color;\n"
+//									"vec4 pos = position;"
+//									"pos.y = (sin(pos.x* timer) + sin(pos.z * timer) * heightScale);"
+//									"gl_Position = projection_view * pos;\n"
+//								"}\n";
+//
+//	const char* fs_source = "#version 410\n \
+//							in vec4 out_color;\n \
+//							out vec4 frag_color;\n \
+//							void main() { frag_color = out_color;}";
+//
+//
+//	unsigned int vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+//	unsigned int fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+//
+//	glShaderSource(vertex_shader, 1, &vs_source, 0);
+//	glCompileShader(vertex_shader);
+//
+//	glShaderSource(fragment_shader, 1, &fs_source, 0);
+//	glCompileShader(fragment_shader);
+//	int success = GL_FALSE;
+//	
+//	glGetShaderiv(m_program_id, GL_COMPILE_STATUS, &success);
+//	if (success == GL_FALSE)
+//	{
+//		int log_length = 0;
+//		glGetShaderiv(m_program_id, GL_INFO_LOG_LENGTH, &log_length);
+//		char* log = new char[log_length];
+//		glGetProgramInfoLog(m_program_id, log_length, 0, log);
+//
+//		printf("Error: Stuff broke in Linker!");
+//		printf("%s\n", log);
+//
+//		delete[] log;
+//
+//	}
+//
+//
+//	m_program_id = glCreateProgram();
+//	glAttachShader(m_program_id, vertex_shader);
+//	glAttachShader(m_program_id, fragment_shader);
+//	glLinkProgram(m_program_id);
+//
+//	
+//	glGetProgramiv(m_program_id, GL_LINK_STATUS, &success);
+//	
+//	if (success == GL_FALSE)
+//	{
+//		int log_length = 0;
+//		glGetProgramiv(m_program_id, GL_INFO_LOG_LENGTH, &log_length);
+//		char* log = new char[log_length];
+//		glGetProgramInfoLog(m_program_id, log_length, 0, log);
+//
+//		printf("Error: Stuff broke in shader!");
+//		printf("%s\n", log);
+//
+//		delete[] log;
+//
+//	}
+//
+//	glDeleteShader(fragment_shader);
+//	glDeleteShader(vertex_shader);
+//}

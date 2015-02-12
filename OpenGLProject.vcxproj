@@ -92,6 +92,8 @@
     <ClInclude Include="src\gl_core_4_4.h" />
     <ClInclude Include="src\IntroToOpenGl.h" />
     <ClInclude Include="src\RenderingGeometry.h" />
+    <ClInclude Include="src\stb_image.h" />
+    <ClInclude Include="src\Texturing.h" />
     <ClInclude Include="src\Utility.h" />
     <ClInclude Include="src\Vertex.h" />
   </ItemGroup>
@@ -104,7 +106,14 @@
     <ClCompile Include="src\IntroToOpenGl.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\RenderingGeometry.cpp" />
+    <ClCompile Include="src\Texturing.cpp" />
     <ClCompile Include="src\Ultility.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\shaders\basic_fragment.glsl" />
+    <None Include="data\shaders\basic_vertex.glsl" />
+    <None Include="data\shaders\textured_fragment.glsl" />
+    <None Include="data\shaders\textured_vertex.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

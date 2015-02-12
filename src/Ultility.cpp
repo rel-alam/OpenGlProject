@@ -22,7 +22,7 @@ bool LoadShader(char* vertex_filename, char* fragment_filename, GLuint* result)
 		fseek(vertex_file, 0, SEEK_SET);
 
 		fseek(fragment_file, 0, SEEK_END);
-		int fragment_file_length = ftell(vertex_file);
+		int fragment_file_length = ftell(fragment_file);
 		fseek(fragment_file, 0, SEEK_SET);
 
 		char* vs_source = new char[vertex_file_length];
@@ -35,27 +35,11 @@ bool LoadShader(char* vertex_filename, char* fragment_filename, GLuint* result)
 		unsigned int vertex_shader = glCreateShader(GL_VERTEX_SHADER);
 		unsigned int fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
 
-		glShaderSource(vertex_shader, 1, &vs_source, 0);
+		glShaderSource(vertex_shader, 1, &vs_source, &vertex_file_length);
 		glCompileShader(vertex_shader);
 
-		glShaderSource(fragment_shader, 1, &fs_source, 0);
+		glShaderSource(fragment_shader, 1, &fs_source, &fragment_file_length);
 		glCompileShader(fragment_shader);
-		int success = GL_FALSE;
-
-		glGetShaderiv(*result, GL_COMPILE_STATUS, &success);
-		if (success == GL_FALSE)
-		{
-			int log_length = 0;
-			glGetShaderiv(*result, GL_INFO_LOG_LENGTH, &log_length);
-			char* log = new char[log_length];
-			glGetProgramInfoLog(*result, log_length, 0, log);
-
-			printf("Error: Stuff broke in Linker!");
-			printf("%s\n", log);
-
-			delete[] log;
-
-		}
 
 
 		*result = glCreateProgram();
@@ -63,12 +47,12 @@ bool LoadShader(char* vertex_filename, char* fragment_filename, GLuint* result)
 		glAttachShader(*result, fragment_shader);
 		glLinkProgram(*result);
 
-
+		int success = GL_FALSE;
 		glGetProgramiv(*result, GL_LINK_STATUS, &success);
 
 		if (success == GL_FALSE)
 		{
-			int log_length = 0;
+			log_length = 0;
 			glGetProgramiv(*result, GL_INFO_LOG_LENGTH, &log_length);
 			char* log = new char[log_length];
 			glGetProgramInfoLog(*result, log_length, 0, log);
