@@ -31,7 +31,7 @@ bool Lighting::startup()
 	std::vector<tinyobj::shape_t> shapes;
 	std::vector<tinyobj::material_t> materials;
 
-	std::string err = tinyobj::LoadObj(shapes, materials, "./models/stanford/bunny.obj");
+	std::string err = tinyobj::LoadObj(shapes, materials, "./models/stanford/dragon.obj");
 
 	if (err.size() != 0)
 	{
@@ -108,11 +108,13 @@ void Lighting::draw()
 	int ambient_uniform = glGetUniformLocation(m_program_id, "ambient_light");
 	int light_dir_uniform = glGetUniformLocation(m_program_id, "light_dir");
 	int light_color_uniform = glGetUniformLocation(m_program_id, "light_color");
-	int material_color_uniform = glGetUniformLocation(m_program_id, "material_color");
+	
 
 	int eye_pos_uniform = glGetUniformLocation(m_program_id, "eye_pos");
 	int specular_uniform = glGetUniformLocation(m_program_id, "specular_power");
 
+
+	int material_color_uniform = glGetUniformLocation(m_program_id, "material_color");
 	glUniform3fv(ambient_uniform, 1, (float*)&m_ambient_light);
 	glUniform3fv(light_dir_uniform, 1, (float*)&m_light_dir);
 	glUniform3fv(light_color_uniform, 1, (float*)&m_light_color);
