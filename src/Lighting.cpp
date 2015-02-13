@@ -21,10 +21,10 @@ bool Lighting::startup()
 
 	Gizmos::create();
 
-	camera = FlyCamera();
-	camera.setLookAt(vec3(10, 10, 10), vec3(0, 0, 0), vec3(0, 1, 0));
-	camera.setSpeed(1);
-	camera.setPrespective(60, 1280 / 720, 0.1f, 1000.f);
+	m_camera = FlyCamera();
+	m_camera.setLookAt(vec3(10, 10, 10), vec3(0, 0, 0), vec3(0, 1, 0));
+	m_camera.setSpeed(1);
+	m_camera.setPrespective(60, 1280 / 720, 0.1f, 1000.f);
 
 	LoadShader("./shaders/lighting_vertex.glsl", "./shaders/lighting_fragment.glsl", &m_program_id);
 
@@ -38,6 +38,12 @@ bool Lighting::startup()
 		return false;
 	}
 	createOpenGLBuffers(shapes);
+
+	m_ambient_light = vec3(0.1f);
+	m_light_dir = vec3(0, -1, 0);
+	m_light_color = vec3(0.6f, 0, 0);
+	m_material_color = vec3(1);
+	m_specular_power = 15;
 
 	return true;
 }
@@ -68,7 +74,7 @@ bool Lighting::update()
 	float dt = (float)glfwGetTime();
 	glfwSetTime(0.0);
 
-	camera.update(dt);
+	m_camera.update(dt);
 
 	vec4 white(1);
 	vec4 black(0, 0, 0, 1);
@@ -97,7 +103,27 @@ void Lighting::draw()
 
 	glUseProgram(m_program_id);
 	int proj_view_uniform = glGetUniformLocation(m_program_id, "projection_view");
-	glUniformMatrix4fv(proj_view_uniform, 1, GL_FALSE, (float*)&camera.getProjectionView());
+	glUniformMatrix4fv(proj_view_uniform, 1, GL_FALSE, (float*)&m_camera.getProjectionView());
+
+	int ambient_uniform = glGetUniformLocation(m_program_id, "ambient_light");
+	int light_dir_uniform = glGetUniformLocation(m_program_id, "light_dir");
+	int light_color_uniform = glGetUniformLocation(m_program_id, "light_color");
+	int material_color_uniform = glGetUniformLocation(m_program_id, "material_color");
+
+	int eye_pos_uniform = glGetUniformLocation(m_program_id, "eye_pos");
+	int specular_uniform = glGetUniformLocation(m_program_id, "specular_power");
+
+	glUniform3fv(ambient_uniform, 1, (float*)&m_ambient_light);
+	glUniform3fv(light_dir_uniform, 1, (float*)&m_light_dir);
+	glUniform3fv(light_color_uniform, 1, (float*)&m_light_color);
+	glUniform3fv(material_color_uniform, 1, (float*)&m_material_color);
+
+
+	vec3 camera_pos = m_camera.m_world[3].xyz;
+	glUniform3fv(eye_pos_uniform, 1, (float*)&camera_pos);
+
+	glUniform1f(specular_uniform, m_specular_power);
+
 
 
 	for (unsigned int mesh_index = 0; mesh_index < m_gl_data.size(); ++mesh_index)
@@ -107,7 +133,7 @@ void Lighting::draw()
 	}
 
 
-	Gizmos::draw(camera.getProjectionView());
+	Gizmos::draw(m_camera.getProjectionView());
 
 	glfwSwapBuffers(m_window);
 	glfwPollEvents();
