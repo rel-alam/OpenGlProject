@@ -6,6 +6,7 @@
 #include "Camera.h"
 #include "Vertex.h"
 
+#include "AntTweakBar.h"
 
 class AdvancedTextures : public Application
 {
@@ -31,9 +32,16 @@ public:
 	vec3 m_light_dir;
 	vec3 m_light_color;
 	float m_specular_power;
+	vec4 m_background_color;
+
+	bool m_draw_gizmos;
+	float m_fps;
 
 
 	FlyCamera m_camera;
+
+	TwBar* m_bar;
+
 };
 
 	

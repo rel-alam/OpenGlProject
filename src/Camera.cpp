@@ -56,7 +56,7 @@ void Camera::updateProjectionViewTransform()
 
 bool FlyCamera::update(float a_deltaTime)
 {
-	m_speed = 5;
+	m_speed = 40;
 	if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_W) == GLFW_PRESS)
 	{
 		m_world[3] -= m_world[2] * m_speed * a_deltaTime;
@@ -85,22 +85,24 @@ bool FlyCamera::update(float a_deltaTime)
 	{
 		m_world[3] -= m_world[1] * m_speed * a_deltaTime;
 	}
-
 	GLFWwindow* window = glfwGetCurrentContext();
-	double x_delta, y_delta;
-	glfwGetCursorPos(window, &x_delta, &y_delta);
-	glfwSetCursorPos(window, 1280.f / 2.f, 720.f / 2.f);
-	x_delta -= (1280.f / 2.f);
-	y_delta -= (720.f / 2.f);
 
-	x_delta /= (1280.f / 2.f);
-	y_delta /= (720.f / 2.f);
-
-	x_delta = x_delta * -m_sensitivity;
-	y_delta = y_delta * -m_sensitivity;
-	
 	if (glfwGetMouseButton(window, 1))
 	{
+		double x_delta, y_delta;
+		glfwGetCursorPos(window, &x_delta, &y_delta);
+		glfwSetCursorPos(window, 1280.f / 2.f, 720.f / 2.f);
+
+		x_delta -= (1280.f / 2.f);
+		y_delta -= (720.f / 2.f);
+
+		x_delta /= (1280.f / 2.f);
+		y_delta /= (720.f / 2.f);
+
+		x_delta = x_delta * -m_sensitivity;
+		y_delta = y_delta * -m_sensitivity;
+		
+	
 
 		vec3 camera_right = (vec3)m_world[0];
 
