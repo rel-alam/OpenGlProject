@@ -5,7 +5,6 @@
 #include <GLFW\glfw3.h>
 #include "Utility.h"
 #include "Vertex.h"
-#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
 

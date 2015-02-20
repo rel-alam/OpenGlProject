@@ -7,12 +7,12 @@
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
 
-#include "Quaternions.h"
+#include "Lighting.h"
 
 int main()
 {
 
-	Quaternions app;
+	Lighting app;
 
 	if (app.startup() == false)
 	{

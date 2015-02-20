@@ -21,9 +21,9 @@ public:
 
 	FlyCamera* m_camera;
 
-	KeyFrame m_hip_frames[4];
-	KeyFrame m_knee_frames[4];
-	KeyFrame m_ankle_frames[4];
+	KeyFrame m_hip_frames[2];
+	KeyFrame m_knee_frames[2];
+	KeyFrame m_ankle_frames[2];
 
 
 	mat4 m_hip_bone;

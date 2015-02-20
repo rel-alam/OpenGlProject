@@ -76,7 +76,13 @@ bool Animation::update()
 	FBXSkeleton* skele = m_file->getSkeletonByIndex(0);
 	FBXAnimation* anim = m_file->getAnimationByIndex(0);
 
-	skele->evaluate(anim, m_timer);
+
+
+	EvaluateSkeleton(anim, skele, m_timer);
+	//skele->evaluate(anim, m_timer);
+
+
+
 
 	for (unsigned int i = 0; i < skele->m_boneCount; ++i)
 	{
@@ -111,7 +117,13 @@ void Animation::draw()
 
 
 	FBXSkeleton *skeleton = m_file->getSkeletonByIndex(0);
-	skeleton->updateBones();
+
+
+
+	UpdateBones(skeleton);
+
+
+
 	int bones_uniform = glGetUniformLocation(m_program_id, "bones");
 	glUniformMatrix4fv(bones_uniform, skeleton->m_boneCount, GL_FALSE, (float*)skeleton->m_bones);
 
@@ -184,4 +196,72 @@ void Animation::GenerateGLMeshes(FBXFile* fbx)
 
 
 
+}
+
+
+void Animation::EvaluateSkeleton(FBXAnimation* anim, FBXSkeleton* skeleton, float timer)
+{
+	float fps = 24.f;
+	int current_frame = (int)(timer * fps);
+	// loop through all the tracks
+	for (unsigned int track_index = 0; track_index < anim->m_trackCount; ++track_index)
+	{
+		
+
+		//wrap back to the start if we've gone too far
+		int track_frame_count = anim->m_tracks[track_index].m_keyframeCount;
+		int track_frame = current_frame % track_frame_count;
+
+		//find what key frames are currently affecting the bone
+		FBXKeyFrame curr_frame = anim->m_tracks[track_index].m_keyframes[track_frame];
+		FBXKeyFrame next_frame = anim->m_tracks[track_index].m_keyframes[(track_frame + 1) % track_frame_count];
+		
+
+		//interpolate between those key frames to generate the matrix
+		//for the current pose
+		float time_since_frame_flip = timer - (current_frame / fps);
+		float t = time_since_frame_flip * fps;
+
+		vec3 new_pos = glm::mix(curr_frame.m_translation, next_frame.m_translation, t);
+		vec3 new_scale = glm::mix(curr_frame.m_scale, next_frame.m_scale, t);
+		glm::quat new_rot = glm::slerp(curr_frame.m_rotation, next_frame.m_rotation, t);
+
+		mat4 local_transform = glm::translate(new_pos) * glm::toMat4(new_rot) * glm::scale(new_scale);
+
+		// get the right track for the given bone
+		int bone_index = anim->m_tracks[track_index].m_boneIndex;
+
+		//set the FBXnode's local transform to match
+		if (bone_index < skeleton->m_boneCount)
+		{
+			skeleton->m_nodes[bone_index]->m_localTransform = local_transform;
+		}
+
+	}
+}
+
+void Animation::UpdateBones(FBXSkeleton* skeleton)
+{
+	//loop through the nodes in the skeleton
+	for (unsigned int bone_index = 0; bone_index < skeleton->m_boneCount; ++bone_index)
+	{
+		//generate their global transforms
+		int parent_index = skeleton->m_parentIndex[bone_index];
+		if (parent_index == -1)
+		{
+			skeleton->m_bones[bone_index] = skeleton->m_nodes[bone_index]->m_localTransform;
+		}
+		else
+		{
+			skeleton->m_bones[bone_index] = skeleton->m_bones[parent_index] * skeleton->m_nodes[bone_index]->m_localTransform;
+		}
+
+		//multiply their global transforms by the inverse bind pose
+
+	}
+
+	for (unsigned int bone_index = 0; bone_index < skeleton->m_boneCount; ++bone_index)
+	{
+		skeleton->m_bones[bone_index] = skeleton->m_bones[bone_index] * skeleton->m_bindPoses[bone_index];
+	}
 }

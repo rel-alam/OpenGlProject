@@ -18,6 +18,13 @@ public:
 
 	void GenerateGLMeshes(FBXFile* fbx);
 
+
+
+	void EvaluateSkeleton(FBXAnimation* anim, FBXSkeleton* skeleton, float timer);
+	void UpdateBones(FBXSkeleton* skeleton);
+
+
+
 	FlyCamera camera;
 
 	float m_timer;
