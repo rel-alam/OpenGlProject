@@ -109,6 +109,12 @@ void Animation::draw()
 	int diffuse_location = glGetUniformLocation(m_program_id, "diffuse");
 	glUniform1i(diffuse_location, 0);
 
+
+	FBXSkeleton *skeleton = m_file->getSkeletonByIndex(0);
+	skeleton->updateBones();
+	int bones_uniform = glGetUniformLocation(m_program_id, "bones");
+	glUniformMatrix4fv(bones_uniform, skeleton->m_boneCount, GL_FALSE, (float*)skeleton->m_bones);
+
 	for (unsigned int i = 0; i < m_meshes.size(); ++i)
 	{
 		FBXMeshNode* curr_mesh = m_file->getMeshByIndex(i);
@@ -157,10 +163,17 @@ void Animation::GenerateGLMeshes(FBXFile* fbx)
 
 		glEnableVertexAttribArray(0); //pos
 		glEnableVertexAttribArray(1); //tex coords
+		glEnableVertexAttribArray(2); //bone indices
+		glEnableVertexAttribArray(3); //bone weights
+		
 
 		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(FBXVertex), (void*)FBXVertex::PositionOffset);
 
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(FBXVertex), (void*)FBXVertex::TexCoord1Offset);
+
+		glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(FBXVertex), (void*)FBXVertex::IndicesOffset);
+
+		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(FBXVertex), (void*)FBXVertex::WeightsOffset);
 
 
 		glBindVertexArray(0);
