@@ -51,12 +51,11 @@ mat4 Camera::getProjectionView()
 void Camera::updateProjectionViewTransform()
 {
 	m_view = glm::inverse(m_world);
-	m_projView = m_view * m_proj;
+	m_projView = m_proj * m_view;
 }
 
 bool FlyCamera::update(float a_deltaTime)
 {
-	m_speed = 40;
 	if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_W) == GLFW_PRESS)
 	{
 		m_world[3] -= m_world[2] * m_speed * a_deltaTime;

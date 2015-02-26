@@ -7,12 +7,12 @@
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
 
-#include "Lighting.h"
+#include "Particles.h"
 
 int main()
 {
 
-	Lighting app;
+	Particles app;
 
 	if (app.startup() == false)
 	{
