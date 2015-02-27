@@ -1,80 +1,115 @@
 #include "gl_core_4_4.h"
 #include <cstdio>
 
-bool LoadShader(char* vertex_filename, char* fragment_filename, GLuint* result)
+
+bool LoadShaderType(char* filename,
+	GLenum shader_type, 
+	unsigned int* output)
 {
 
-	bool succeeded = false;
+	bool succeeded = true;
 
-	FILE* vertex_file = fopen(vertex_filename, "r");
-	FILE* fragment_file = fopen(fragment_filename, "r");
+	FILE* shader_file = fopen(filename, "r");
 
-	if (vertex_file == 0 || fragment_file == 0)
+	//did it open successfully
+	if (shader_file == 0)
 	{
-		fclose(vertex_file);
-		fclose(fragment_file);
-		return succeeded;
+		succeeded = false;
 	}
+
 	else
 	{
-		fseek(vertex_file, 0, SEEK_END);
-		int vertex_file_length = ftell(vertex_file);
-		fseek(vertex_file, 0, SEEK_SET);
+		// find out how long the file is
+		fseek(shader_file, 0, SEEK_END);
+		int shader_file_length = ftell(shader_file);
+		fseek(shader_file, 0, SEEK_SET);
 
-		fseek(fragment_file, 0, SEEK_END);
-		int fragment_file_length = ftell(fragment_file);
-		fseek(fragment_file, 0, SEEK_SET);
+		//allocate enough space for the shader
+		char *shader_source = new char[shader_file_length];
+		//read the file anmd update the length to be accurate
+		shader_file_length = fread(shader_source, 1, shader_file_length, shader_file);
 
-		char* vs_source = new char[vertex_file_length];
-		char* fs_source = new char[fragment_file_length];
-
-		vertex_file_length = fread(vs_source, 1, vertex_file_length, vertex_file);
-		fragment_file_length = fread(fs_source, 1, fragment_file_length, fragment_file);
-
+		
 		int log_length = 0;
-		unsigned int vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-		unsigned int fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
 
-		glShaderSource(vertex_shader, 1, &vs_source, &vertex_file_length);
-		glCompileShader(vertex_shader);
+		//create the shader handle
+		unsigned int shader_handle = glCreateShader(shader_type);
+		//compile the shader
+		glShaderSource(shader_handle, 1, &shader_source, &shader_file_length);
+		glCompileShader(shader_handle);
+		//catch for errors
+		int success = GL_FALSE;
+		glGetShaderiv(shader_handle, GL_COMPILE_STATUS, &success);
+		if (success == GL_FALSE)
+		{
+			glGetShaderiv(shader_handle, GL_INFO_LOG_LENGTH, &log_length);
+			char* log = new char[log_length];
+			glGetShaderInfoLog(shader_handle, log_length, NULL, log);
+			printf("%s\n", log);
+			delete[] log;
+			succeeded = false;
+		}
+		if (succeeded)
+		{
+			*output = shader_handle;
+		}
+		delete[] shader_source;
+		fclose(shader_file);
 
-		glShaderSource(fragment_shader, 1, &fs_source, &fragment_file_length);
-		glCompileShader(fragment_shader);
+	}
+
+	return succeeded;
+
+}
+
+bool LoadShader(char* vertex_filename,char* geometry_filename, char* fragment_filename, GLuint* result)
+{
+	bool succeeded = true;
+
+	*result = glCreateProgram();
+
+	unsigned int vertex_shader;
+
+	LoadShaderType(vertex_filename, GL_VERTEX_SHADER, &vertex_shader);
+	glAttachShader(*result, vertex_shader);
+	glDeleteShader(vertex_shader);
 
 
-		*result = glCreateProgram();
-		glAttachShader(*result, vertex_shader);
+	if (geometry_filename != nullptr)
+	{
+		unsigned int geometry_shader;
+		LoadShaderType(geometry_filename, GL_GEOMETRY_SHADER, &geometry_shader);
+		glAttachShader(*result, geometry_shader);
+		glDeleteShader(geometry_shader);
+	}
+
+	if (fragment_filename != nullptr)
+	{
+		unsigned int fragment_shader;
+		LoadShaderType(fragment_filename, GL_FRAGMENT_SHADER, &fragment_shader);
 		glAttachShader(*result, fragment_shader);
+		glDeleteShader(fragment_shader);
+	}
+
 		glLinkProgram(*result);
 
-		int success = GL_FALSE;
+		GLint success;
+
 		glGetProgramiv(*result, GL_LINK_STATUS, &success);
 
 		if (success == GL_FALSE)
 		{
-			log_length = 0;
+			GLint log_length;
 			glGetProgramiv(*result, GL_INFO_LOG_LENGTH, &log_length);
+
 			char* log = new char[log_length];
 			glGetProgramInfoLog(*result, log_length, 0, log);
 
-			printf("Error: Stuff broke in shader!");
-			printf("%s\n", log);
+			printf("ERROR: STUFF DONE SCREWED UP IN UR SHADER BUDDY!\n\n");
+			printf("%s", log);
 
 			delete[] log;
-
+			succeeded = false;
 		}
-
-		glDeleteShader(fragment_shader);
-		glDeleteShader(vertex_shader);
-
-		succeeded = true;
-
-		delete[] vs_source;
-		delete[] fs_source;
-	}
-
-	fclose(vertex_file);
-	fclose(fragment_file);
-
 	return succeeded;
 }

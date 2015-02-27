@@ -24,7 +24,7 @@ bool Texturing::startup()
 	loadTexture("./textures/crate.png");
 	generateQuad(5.0f);
 
-	LoadShader("./shaders/textured_vertex.glsl", "./shaders/textured_fragment.glsl", &m_program_id);
+	LoadShader("./shaders/textured_vertex.glsl", 0,"./shaders/textured_fragment.glsl", &m_program_id);
 
 
 	m_camera = new FlyCamera();

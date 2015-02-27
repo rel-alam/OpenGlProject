@@ -26,7 +26,7 @@ bool Lighting::startup()
 	m_camera.setSpeed(1);
 	m_camera.setPrespective(60, 1280 / 720, 0.1f, 1000.f);
 
-	LoadShader("./shaders/lighting_vertex.glsl", "./shaders/lighting_fragment.glsl", &m_program_id);
+	LoadShader("./shaders/lighting_vertex.glsl", 0,"./shaders/lighting_fragment.glsl", &m_program_id);
 
 	std::vector<tinyobj::shape_t> shapes;
 	std::vector<tinyobj::material_t> materials;
@@ -51,7 +51,7 @@ bool Lighting::startup()
 void Lighting::reloadShader()
 {
 	glDeleteProgram(m_program_id);
-	LoadShader("./shaders/lighting_vertex.glsl", "./shaders/lighting_fragment.glsl", &m_program_id);
+	LoadShader("./shaders/lighting_vertex.glsl", 0,"./shaders/lighting_fragment.glsl", &m_program_id);
 }
 
 void Lighting::shutdown()

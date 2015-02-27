@@ -14,7 +14,7 @@ bool RenderingGeometry::startup()
 	//generateShader();
 	generateGrid(10, 10);
 
-	LoadShader("./shaders/basic_vertex.glsl", "./shaders/basic_fragment.glsl", &m_program_id);
+	LoadShader("./shaders/basic_vertex.glsl", 0,"./shaders/basic_fragment.glsl", &m_program_id);
 
 
 	Gizmos::create();
@@ -79,7 +79,7 @@ void RenderingGeometry::draw()
 	{
 		glUniformMatrix4fv(proj_view_handle, 1, false, (float*)&m_camera->getProjectionView());
 	}
-	timer+= 0.01;
+	timer+= 0.01f;
 	
 	int timer_handle = glGetUniformLocation(m_program_id, "timer");
 	

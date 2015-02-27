@@ -31,7 +31,7 @@ bool Animation::startup()
 
 	GenerateGLMeshes(m_file);
 
-	LoadShader("./shaders/skinned_vertex.glsl", "./shaders/skinned_fragment.glsl", &m_program_id);
+	LoadShader("./shaders/skinned_vertex.glsl",0 ,"./shaders/skinned_fragment.glsl", &m_program_id);
 
 
 
@@ -229,7 +229,7 @@ void Animation::EvaluateSkeleton(FBXAnimation* anim, FBXSkeleton* skeleton, floa
 		mat4 local_transform = glm::translate(new_pos) * glm::toMat4(new_rot) * glm::scale(new_scale);
 
 		// get the right track for the given bone
-		int bone_index = anim->m_tracks[track_index].m_boneIndex;
+		unsigned int bone_index = anim->m_tracks[track_index].m_boneIndex;
 
 		//set the FBXnode's local transform to match
 		if (bone_index < skeleton->m_boneCount)

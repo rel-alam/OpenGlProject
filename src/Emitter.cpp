@@ -100,9 +100,9 @@ void Emitter::EmitParticles()
 		m_particles[m_alive_count].velocity.xyz = glm::sphericalRand(velocity_length);
 		m_particles[m_alive_count].velocity.w = 0;
 
-		vec4 n = glm::normalize(m_particles[m_alive_count].velocity);
+		//vec4 n = glm::normalize(m_particles[m_alive_count].velocity);
 
-		m_particles[m_alive_count].position.xyz = vec3(0, 0, 5);
+		//m_particles[m_alive_count].position.xyz = vec3(0, 0, 5);
 
 		//m_particles[m_alive_count].position.xyz = glm::lerp(vec3(1, 1, 0), vec3(5,5,0), dt);
 

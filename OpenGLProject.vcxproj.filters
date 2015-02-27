@@ -13,12 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\Cameras">
-      <UniqueIdentifier>{41f1086c-9f0f-4bff-b47b-d58d073c0d0b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Cameras">
-      <UniqueIdentifier>{3c03e63a-3260-4f80-89ac-342255266e57}</UniqueIdentifier>
-    </Filter>
     <Filter Include="RenderingGeometry">
       <UniqueIdentifier>{904dd896-2120-43e7-8781-6f0cbc67e57b}</UniqueIdentifier>
     </Filter>
@@ -43,6 +37,12 @@
     <Filter Include="Particles">
       <UniqueIdentifier>{85f13674-b1ae-42fd-b983-6b4b0c5cefa6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GPUParticles">
+      <UniqueIdentifier>{880ac519-4855-4fca-8cdf-a500df51f10f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Cameras">
+      <UniqueIdentifier>{41f1086c-9f0f-4bff-b47b-d58d073c0d0b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\gl_core_4_4.h">
@@ -58,10 +58,10 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\CameraAndProjection.h">
-      <Filter>Header Files\Cameras</Filter>
+      <Filter>Cameras</Filter>
     </ClInclude>
     <ClInclude Include="src\Camera.h">
-      <Filter>Header Files\Cameras</Filter>
+      <Filter>Cameras</Filter>
     </ClInclude>
     <ClInclude Include="src\RenderingGeometry.h">
       <Filter>RenderingGeometry</Filter>
@@ -105,6 +105,12 @@
     <ClInclude Include="src\Emitter.h">
       <Filter>Particles</Filter>
     </ClInclude>
+    <ClInclude Include="src\GPUParticles.h">
+      <Filter>GPUParticles</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GPUEmitter.h">
+      <Filter>GPUParticles</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gl_core_4_4.c">
@@ -121,12 +127,6 @@
     </ClCompile>
     <ClCompile Include="src\IntroToOpenGl.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\CameraAndProjection.cpp">
-      <Filter>Source Files\Cameras</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Camera.cpp">
-      <Filter>Source Files\Cameras</Filter>
     </ClCompile>
     <ClCompile Include="src\RenderingGeometry.cpp">
       <Filter>RenderingGeometry</Filter>
@@ -157,6 +157,18 @@
     </ClCompile>
     <ClCompile Include="src\Emitter.cpp">
       <Filter>Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GPUParticles.cpp">
+      <Filter>GPUParticles</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CameraAndProjection.cpp">
+      <Filter>Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Camera.cpp">
+      <Filter>Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GPUEmitter.cpp">
+      <Filter>GPUParticles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +206,18 @@
       <Filter>Resource Files\shaders</Filter>
     </None>
     <None Include="data\shaders\particle_fragment.glsl">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="data\shaders\gpu_particle_vert.glsl">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="data\shaders\gpu_particle_geom.glsl">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="data\shaders\gpu_particle_frag.glsl">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="data\shaders\particle_update_vert.glsl">
       <Filter>Resource Files\shaders</Filter>
     </None>
   </ItemGroup>

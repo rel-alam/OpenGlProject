@@ -7,12 +7,12 @@
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
 
-#include "Particles.h"
+#include "GPUParticles.h"
 
 int main()
 {
 
-	Particles app;
+	GPUParticles app;
 
 	if (app.startup() == false)
 	{
