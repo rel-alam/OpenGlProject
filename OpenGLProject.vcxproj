@@ -87,9 +87,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="deps\FBXLoader\FBXFile.h" />
+    <ClInclude Include="src\AABB.h" />
     <ClInclude Include="src\AdvancedTextures.h" />
     <ClInclude Include="src\Animation.h" />
     <ClInclude Include="src\Application.h" />
+    <ClInclude Include="src\BoundingSphere.h" />
+    <ClInclude Include="src\BoundingTest.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\CameraAndProjection.h" />
     <ClInclude Include="src\Emitter.h" />
@@ -110,9 +113,12 @@
     <ClInclude Include="src\Vertex.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\AABB.cpp" />
     <ClCompile Include="src\AdvancedTextures.cpp" />
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\BoundingSphere.cpp" />
+    <ClCompile Include="src\BoundingTest.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\CameraAndProjection.cpp" />
     <ClCompile Include="src\Emitter.cpp" />

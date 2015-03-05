@@ -43,6 +43,9 @@
     <Filter Include="Cameras">
       <UniqueIdentifier>{41f1086c-9f0f-4bff-b47b-d58d073c0d0b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="BoundingVolumes">
+      <UniqueIdentifier>{3f325c02-a041-4ad9-86a1-b330d5f0f86a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\gl_core_4_4.h">
@@ -111,6 +114,15 @@
     <ClInclude Include="src\GPUEmitter.h">
       <Filter>GPUParticles</Filter>
     </ClInclude>
+    <ClInclude Include="src\AABB.h">
+      <Filter>BoundingVolumes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BoundingSphere.h">
+      <Filter>BoundingVolumes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BoundingTest.h">
+      <Filter>BoundingVolumes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gl_core_4_4.c">
@@ -169,6 +181,15 @@
     </ClCompile>
     <ClCompile Include="src\GPUEmitter.cpp">
       <Filter>GPUParticles</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AABB.cpp">
+      <Filter>BoundingVolumes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BoundingSphere.cpp">
+      <Filter>BoundingVolumes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BoundingTest.cpp">
+      <Filter>BoundingVolumes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

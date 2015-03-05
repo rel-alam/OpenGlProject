@@ -7,12 +7,12 @@
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
 
-#include "GPUParticles.h"
+#include "BoundingTest.h"
 
 int main()
 {
 
-	GPUParticles app;
+	BoundingTest app;
 
 	if (app.startup() == false)
 	{
