@@ -46,6 +46,9 @@
     <Filter Include="BoundingVolumes">
       <UniqueIdentifier>{3f325c02-a041-4ad9-86a1-b330d5f0f86a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MultiThreading">
+      <UniqueIdentifier>{14cd749b-9055-4c12-992a-2f4b4b6150a7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\gl_core_4_4.h">
@@ -123,6 +126,9 @@
     <ClInclude Include="src\BoundingTest.h">
       <Filter>BoundingVolumes</Filter>
     </ClInclude>
+    <ClInclude Include="src\MultiThread.h">
+      <Filter>MultiThreading</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gl_core_4_4.c">
@@ -190,6 +196,9 @@
     </ClCompile>
     <ClCompile Include="src\BoundingTest.cpp">
       <Filter>BoundingVolumes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MultiThread.cpp">
+      <Filter>MultiThreading</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
