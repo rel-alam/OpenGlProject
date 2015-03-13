@@ -20,10 +20,10 @@ bool CameraAndProjection::startup()
 
 Gizmos::create();
 
-camera = new FlyCamera();
-camera->setLookAt(vec3(10, 10, 10), vec3(0, 0, 0), vec3(0, 1, 0));
-camera->setSpeed(1);
-camera->setPrespective(60, 1280 / 720, 0.1f, 1000.f);
+camera = FlyCamera();
+camera.setLookAt(vec3(10, 10, 10), vec3(0, 0, 0), vec3(0, 1, 0));
+camera.setSpeed(40);
+camera.setPrespective(60, 1280 / 720, 0.1f, 1000.f);
 	return true;
 }
 
@@ -37,12 +37,13 @@ bool CameraAndProjection::update()
 	{
 		return false;
 	}
+	Gizmos::clear();
 
 
 	float dt = (float)glfwGetTime();
 	glfwSetTime(0.0);
 
-	camera->update(dt);
+	camera.update(dt);
 
 	vec4 white(1);
 	vec4 black(0, 0, 0, 1);
@@ -64,7 +65,7 @@ void CameraAndProjection::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
-	Gizmos::draw(camera->getProjectionView());
+	Gizmos::draw(camera.getProjectionView());
 	
 	glfwSwapBuffers(m_window);
 	glfwPollEvents();

@@ -12,7 +12,7 @@ public:
 	virtual bool update();
 	virtual void draw();
 
-	FlyCamera* camera;
+	FlyCamera camera;
 
 };
 

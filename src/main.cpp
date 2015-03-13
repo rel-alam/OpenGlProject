@@ -7,12 +7,12 @@
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
 
-#include "BoundingTest.h"
+#include "RenderTargets.h"
 
 int main()
 {
 
-	BoundingTest app;
+	RenderTargets app;
 
 	if (app.startup() == false)
 	{

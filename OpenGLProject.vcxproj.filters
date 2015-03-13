@@ -49,6 +49,15 @@
     <Filter Include="MultiThreading">
       <UniqueIdentifier>{14cd749b-9055-4c12-992a-2f4b4b6150a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="RenderTargets">
+      <UniqueIdentifier>{05a6c381-d36e-49d1-b134-1f01b1845a6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SceneManagement">
+      <UniqueIdentifier>{99877574-a16d-4c3c-b835-3b095210edbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PostProcess">
+      <UniqueIdentifier>{4177ecdc-35c7-4fba-b245-4a249b5d08fc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\gl_core_4_4.h">
@@ -129,6 +138,15 @@
     <ClInclude Include="src\MultiThread.h">
       <Filter>MultiThreading</Filter>
     </ClInclude>
+    <ClInclude Include="src\RenderTargets.h">
+      <Filter>RenderTargets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SceneManagement.h">
+      <Filter>SceneManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PostProcess.h">
+      <Filter>PostProcess</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gl_core_4_4.c">
@@ -199,6 +217,15 @@
     </ClCompile>
     <ClCompile Include="src\MultiThread.cpp">
       <Filter>MultiThreading</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RenderTargets.cpp">
+      <Filter>RenderTargets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneManagement.cpp">
+      <Filter>SceneManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PostProcess.cpp">
+      <Filter>PostProcess</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
