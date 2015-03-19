@@ -2,6 +2,7 @@
 #include "gl_core_4_4.h"
 #include <GLFW\glfw3.h>
 #include "Gizmos.h"
+#include "Utility.h"
 
 #define GSM_SWIZZLE
 #include "glm/glm.hpp"
@@ -47,7 +48,8 @@ void PostProcess::generateScreenspaceQuad()
 		-1,	 1, 0, 1, half_texel.x, 1 - half_texel.y,
 		-1, -1, 0, 1, half_texel.x, half_texel.y,
 		 1,	-1, 0, 1, 1 - half_texel.x, half_texel.y,
-		 1,	 1, 0, 1, 1 - half_texel.x, 1 - half_texel.y,
+		 1,	 1, 0, 1, 1 - half_texel.x, 1 - half_texel.y,
+
 	};
 
 	glGenVertexArrays(1, &m_quad.m_VAO);
@@ -84,6 +86,11 @@ bool PostProcess::startup()
 	camera.setLookAt(vec3(10, 10, 10), vec3(0, 0, 0), vec3(0, 1, 0));
 	camera.setSpeed(40);
 	camera.setPrespective(60, 1280 / 720, 0.1f, 1000.f);
+
+	generateFrameBuffer();
+	generateScreenspaceQuad();
+	LoadShader("./shaders/post_vertex.glsl", 0, "./shaders/post_fragment.glsl", &m_program_id);
+
 	return true;
 }
 
@@ -117,15 +124,36 @@ bool PostProcess::update()
 		Gizmos::addLine(vec3(-10 + i, 0, -10), vec3(-10 + i, 0, 10), i == 10 ? white : black);
 		Gizmos::addLine(vec3(-10, 0, -10 + i), vec3(10, 0, -10 + i), i == 10 ? white : black);
 	}
+	Gizmos::addSphere(vec3(0, 0, 0), 4.f, 25, 25, vec4(1, 0.5, 0, 1));
 
 	return true;
 }
 
 void PostProcess::draw()
 {
+
+	glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
+	glViewport(0, 0, 1280, 720);
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	Gizmos::draw(camera.getProjectionView());
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glViewport(0, 0, 1280, 720);
+
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	glUseProgram(m_program_id);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_fbo_texture);
+
+	int loc = glGetUniformLocation(m_program_id, "target"); 
+	glUniform1i(loc, 0);
+
+	glBindVertexArray(m_quad.m_VAO);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
 
 	glfwSwapBuffers(m_window);
 	glfwPollEvents();

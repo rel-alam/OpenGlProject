@@ -7,12 +7,12 @@
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
 
-#include "RenderTargets.h"
+#include "Shadows.h"
 
 int main()
 {
 
-	RenderTargets app;
+	Shadows app;
 
 	if (app.startup() == false)
 	{
