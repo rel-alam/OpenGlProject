@@ -7,12 +7,12 @@
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
 
-#include "Shadows.h"
+#include "Deferred.h"
 
 int main()
 {
 
-	Shadows app;
+	Deferred app;
 
 	if (app.startup() == false)
 	{
