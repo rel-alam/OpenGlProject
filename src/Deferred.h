@@ -14,13 +14,16 @@ public:
 	virtual void draw();
 
 	void renderDirectionalLight(vec3 light_dir, vec3 light_color);
+	void renderPointLight(vec3 position, float radius, vec3 light_color);
 
 	void buildMesh();
 	void buildQuad();
+	void buildCube();
 	void buildGBuffer();
 	void buildLightBuffer();
 
 	// load up a mesh
+	OpenGLData m_light_cube;
 	OpenGLData m_bunny;
 	OpenGLData m_screenspace_quad;
 

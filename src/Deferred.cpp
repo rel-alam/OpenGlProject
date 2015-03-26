@@ -30,14 +30,20 @@ bool Deferred::startup()
 
 	buildMesh();
 	buildQuad();
+	buildCube();
 	buildGBuffer();
 	buildLightBuffer();
+	
 
 	LoadShader("./shaders/gBuffer_vertex.glsl", 0, "./shaders/gBuffer_fragment.glsl", &m_gbuffer_program);
 
 	LoadShader("./shaders/composite_vertex.glsl", 0, "./shaders/composite_fragment.glsl", &m_composite_program);
 
 	LoadShader("./shaders/composite_vertex.glsl", 0, "./shaders/directional_light_fragment.glsl", &m_directional_light_program);
+
+	LoadShader("./shaders/point_light_vertex.glsl", 0, "./shaders/point_light_fragment.glsl", &m_point_light_program);
+
+	glEnable(GL_CULL_FACE);
 
 	return true;
 }
@@ -132,8 +138,30 @@ void Deferred::draw()
 	glBindTexture(GL_TEXTURE_2D, m_normals_texture);
 
 
-	renderDirectionalLight(vec3(0, -1, 0), vec3(1, 0, 0));
+	//renderDirectionalLight(vec3(1, 0, 0), vec3(1, 0, 0));
+	//renderDirectionalLight(vec3(0, 1, 0), vec3(0, 1, 0));
+	//renderDirectionalLight(vec3(0, 0, 1), vec3(0, 0, 1));
 
+	glUseProgram(m_point_light_program);
+	view_proj_uniform = glGetUniformLocation(m_point_light_program, "proj_view");
+
+	position_tex_uniform = glGetUniformLocation(m_point_light_program, "position_texture");
+
+	normals_tex_uniform = glGetUniformLocation(m_point_light_program, "normal_texture");
+
+	glUniformMatrix4fv(view_proj_uniform, 1, GL_FALSE, (float*)&camera.m_projView);
+	glUniform1i(position_tex_uniform, 0);
+	glUniform1i(normals_tex_uniform, 1);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_position_texture);
+
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, m_normals_texture);
+
+	//draw the point lights
+	renderPointLight(vec3(0, 8, 0), 5, vec3(1, 1, 0));
+	renderPointLight(vec3(5, 8, 0), 5, vec3(1, 1, 1));
+	renderPointLight(vec3(-5, 0, -5), 5, vec3(1, 1, 1));
 
 	glDisable(GL_BLEND);
 
@@ -232,7 +260,7 @@ void Deferred::buildGBuffer()
 
 	glGenTextures(1, &m_position_texture);
 	glBindTexture(GL_TEXTURE_2D, m_position_texture);
-	glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGB8, 1280, 720);
+	glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGB32F, 1280, 720);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
@@ -340,6 +368,61 @@ void Deferred::buildQuad()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
+void Deferred::buildCube()
+{
+
+	float vertex_data[]
+	{
+		-1, -1, 1, 1,
+		1, -1, 1, 1,
+		1, -1, -1, 1,
+		-1, -1, -1, 1,
+
+		- 1, 1, 1, 1,
+		1, 1, 1, 1,
+		1, 1, -1, 1,
+		-1, 1, -1, 1
+
+	};
+
+	unsigned int index_data[] =
+	{
+		4, 5, 0,
+		5, 1, 0,
+		5, 6, 1,
+		6, 2, 1,
+		6, 7, 2,
+		7, 3, 2,
+		7, 4, 3,
+		4, 0, 3,
+		7, 6, 4,
+		6, 5, 4,
+		0, 1, 3,
+		1, 2, 3,
+	};
+
+	glGenVertexArrays(1, &m_light_cube.m_VAO);
+
+	glGenBuffers(1, &m_light_cube.m_VBO);
+	glGenBuffers(1, &m_light_cube.m_IBO);
+
+	glBindVertexArray(m_light_cube.m_VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, m_light_cube.m_VBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_light_cube.m_IBO);
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_data), vertex_data, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(index_data), index_data, GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(0); //position
+
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(float)* 4, 0);
+
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
 
 void Deferred::renderDirectionalLight(vec3 light_dir, vec3 light_color)
 {
@@ -355,4 +438,22 @@ void Deferred::renderDirectionalLight(vec3 light_dir, vec3 light_color)
 
 	glBindVertexArray(m_screenspace_quad.m_VAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+}
+
+void Deferred::renderPointLight(vec3 position, float radius, vec3 light_color)
+{
+	vec4 view_space_pos = camera.m_view * vec4(position, 1);
+
+	int pos_uniform = glGetUniformLocation(m_point_light_program, "light_position");
+	int view_pos_uniform = glGetUniformLocation(m_point_light_program, "light_view_position");
+	int light_diffuse_uniform = glGetUniformLocation(m_point_light_program, "light_diffuse");
+	int light_radius_uniform = glGetUniformLocation(m_point_light_program, "light_radius");
+
+	glUniform3fv(pos_uniform, 1, (float*)&position);
+	glUniform3fv(view_pos_uniform, 1, (float*)&view_space_pos);
+	glUniform3fv(light_diffuse_uniform, 1, (float*)&light_color);
+	glUniform1f(light_radius_uniform, radius);
+
+	glBindVertexArray(m_light_cube.m_VAO);
+	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 }
