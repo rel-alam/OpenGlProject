@@ -1,5 +1,40 @@
 #include "gl_core_4_4.h"
 #include <cstdio>
+#include "AntTweakBar.h"
+#include "glm_header.h"
+#include "gl_core_4_4.h"
+#include <GLFW\glfw3.h>
+
+void OnMouseButton(GLFWwindow* window, int button, int pressed, int mod_keys)
+{
+	TwEventMouseButtonGLFW(button, pressed);
+}
+
+void OnMousePosition(GLFWwindow* window, double x, double y)
+{
+	TwEventMousePosGLFW((int)x, (int)y);
+}
+
+void OnMouseScroll(GLFWwindow* window, double x, double y)
+{
+	TwEventMouseWheelGLFW((int)y);
+}
+
+void OnKey(GLFWwindow* window, int key, int scancode, int pressed, int mod_keys)
+{
+	TwEventKeyGLFW(key, pressed);
+}
+
+void OnChar(GLFWwindow* window, unsigned int c)
+{
+	TwEventCharGLFW(c, GLFW_PRESS);
+}
+
+void OnWindowResize(GLFWwindow*, int width, int height)
+{
+	TwWindowSize(width, height);
+	glViewport(0, 0, width, height);
+}
 
 
 bool LoadShaderType(char* filename,
@@ -113,3 +148,5 @@ bool LoadShader(char* vertex_filename,char* geometry_filename, char* fragment_fi
 		}
 	return succeeded;
 }
+
+

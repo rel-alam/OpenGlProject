@@ -4,6 +4,8 @@
 #include "Application.h"
 #include "Camera.h"
 #include "Vertex.h"
+#include "AntTweakBar.h"
+
 class Deferred : public Application
 {
 public:
@@ -47,6 +49,8 @@ public:
 	unsigned int m_composite_program;
 
 	FlyCamera camera;
+
+	TwBar* m_bar;
 
 };
 

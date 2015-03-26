@@ -9,6 +9,9 @@
 #include "glm/ext.hpp"
 
 #include "Utility.h"
+#include "AdvancedTextures.h"
+
+
 
 bool Deferred::startup()
 {
@@ -16,8 +19,20 @@ bool Deferred::startup()
 	{
 		return false;
 	}
+
+	TwInit(TW_OPENGL_CORE, nullptr);
+	TwWindowSize(1280, 720);
+
+	glfwSetMouseButtonCallback(m_window, OnMouseButton);
+	glfwSetCursorPosCallback(m_window, OnMousePosition);
+	glfwSetScrollCallback(m_window, OnMouseScroll);
+	glfwSetKeyCallback(m_window, OnKey);
+	glfwSetCharCallback(m_window, OnChar);
+	glfwSetWindowSizeCallback(m_window, OnWindowResize);
+
 	glClearColor(0.3f, 0.3f, 0.3f, 1);
 	glEnable(GL_DEPTH_TEST);
+
 
 
 
@@ -43,6 +58,11 @@ bool Deferred::startup()
 
 	LoadShader("./shaders/point_light_vertex.glsl", 0, "./shaders/point_light_fragment.glsl", &m_point_light_program);
 
+
+	m_bar = TwNewBar("My New Awesome Bar!!!!!!!");
+
+
+
 	glEnable(GL_CULL_FACE);
 
 	return true;
@@ -51,6 +71,9 @@ bool Deferred::startup()
 void Deferred::shutdown()
 {
 	Gizmos::destroy();
+	TwDeleteAllBars();
+	TwTerminate();
+	Application::shutdown();
 }
 bool Deferred::update()
 {
@@ -159,9 +182,10 @@ void Deferred::draw()
 	glBindTexture(GL_TEXTURE_2D, m_normals_texture);
 
 	//draw the point lights
-	renderPointLight(vec3(0, 8, 0), 5, vec3(1, 1, 0));
-	renderPointLight(vec3(5, 8, 0), 5, vec3(1, 1, 1));
-	renderPointLight(vec3(-5, 0, -5), 5, vec3(1, 1, 1));
+	vec3 lightpos = vec3(1, 8, 0);
+	renderPointLight(vec3(1, 8, 0), 15, vec3(0, 1, 1));
+	renderPointLight(vec3(1, 8, 0), 15, vec3(1, 1, 1));
+	renderPointLight(vec3(0, 0, 1), 15, vec3(1, 1, 0));
 
 	glDisable(GL_BLEND);
 
@@ -195,7 +219,7 @@ void Deferred::draw()
 	
 
 	//Gizmos::draw(camera.getProjectionView());
-
+	TwDraw();
 	glfwSwapBuffers(m_window);
 	glfwPollEvents();
 }
