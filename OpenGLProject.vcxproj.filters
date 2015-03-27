@@ -64,6 +64,12 @@
     <Filter Include="Deferred">
       <UniqueIdentifier>{fe8f8095-c633-4521-ac1b-8874bfbfe977}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ProceduralGeneration">
+      <UniqueIdentifier>{813beaed-20c0-45b9-8c77-25da0c4843ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PerlinNoise">
+      <UniqueIdentifier>{19e5f0ee-cf90-4da3-acb3-dbdb95f7b40e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\gl_core_4_4.h">
@@ -159,6 +165,12 @@
     <ClInclude Include="src\Deferred.h">
       <Filter>Deferred</Filter>
     </ClInclude>
+    <ClInclude Include="src\ProceduralGeneration.h">
+      <Filter>ProceduralGeneration</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PerlinNoise.h">
+      <Filter>PerlinNoise</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gl_core_4_4.c">
@@ -245,6 +257,12 @@
     <ClCompile Include="src\Deferred.cpp">
       <Filter>Deferred</Filter>
     </ClCompile>
+    <ClCompile Include="src\ProceduralGeneration.cpp">
+      <Filter>ProceduralGeneration</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PerlinNoise.cpp">
+      <Filter>PerlinNoise</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\shaders\basic_vertex.glsl">
@@ -326,6 +344,12 @@
       <Filter>Resource Files\shaders</Filter>
     </None>
     <None Include="data\shaders\point_light_vertex.glsl">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="data\shaders\perlin_vertex.glsl">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="data\shaders\perlin_fragment.glsl">
       <Filter>Resource Files\shaders</Filter>
     </None>
   </ItemGroup>

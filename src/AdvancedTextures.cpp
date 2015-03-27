@@ -9,13 +9,6 @@
 #include "stb_image.h"
 
 
-
-
-
-
-
-
-
 bool AdvancedTextures::startup()
 {
 	if (Application::startup() == false)

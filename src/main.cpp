@@ -7,12 +7,12 @@
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
 
-#include "Deferred.h"
+#include "ProceduralGeneration.h"
 
 int main()
 {
 
-	Deferred app;
+	ProceduralGeneration app;
 
 	if (app.startup() == false)
 	{
