@@ -1,5 +1,5 @@
-#ifndef _LIGHTING_H_
-#define _LIGHTING_H_
+#ifndef _PBR_H_
+#define _PBR_H_
 
 #include "Application.h"
 #include "Camera.h"
@@ -16,7 +16,7 @@
 //	unsigned int m_index_count;
 //};
 
-class Lighting : public Application
+class PhysicalBasedRendering : public Application
 {
 public:
 	virtual bool startup();

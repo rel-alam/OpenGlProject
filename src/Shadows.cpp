@@ -56,11 +56,11 @@ void Shadows::buildMeshes()
 	glGenBuffers(1, &m_bunny.m_IBO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, m_bunny.m_VBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_bunny.m_VBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_bunny.m_IBO);
 
 
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float)* vertex_data.size(), vertex_data.data(), GL_STATIC_DRAW);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(unsigned int)* mesh->indices.size(), mesh->indices.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int)* mesh->indices.size(), mesh->indices.data(), GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);

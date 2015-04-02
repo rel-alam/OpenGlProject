@@ -1,4 +1,4 @@
-#include "Lighting.h"
+#include "PhysicallyBasedRendering.h"
 #include "gl_core_4_4.h"
 #include <GLFW\glfw3.h>
 #include "Gizmos.h"
@@ -8,7 +8,7 @@
 #include "glm/ext.hpp"
 
 
-bool Lighting::startup()
+bool PhysicalBasedRendering::startup()
 {
 	if (Application::startup() == false)
 	{
@@ -23,10 +23,10 @@ bool Lighting::startup()
 
 	m_camera = FlyCamera();
 	m_camera.setLookAt(vec3(10, 10, 10), vec3(0, 0, 0), vec3(0, 1, 0));
-	m_camera.setSpeed(1);
+	m_camera.setSpeed(15);
 	m_camera.setPrespective(60, 1280 / 720, 0.1f, 1000.f);
 
-	LoadShader("./shaders/lighting_vertex.glsl", 0,"./shaders/lighting_fragment.glsl", &m_program_id);
+	LoadShader("./shaders/PBR_vertex.glsl", 0,"./shaders/PBR_fragment.glsl", &m_program_id);
 
 	std::vector<tinyobj::shape_t> shapes;
 	std::vector<tinyobj::material_t> materials;
@@ -48,13 +48,13 @@ bool Lighting::startup()
 	return true;
 }
 
-void Lighting::reloadShader()
+void PhysicalBasedRendering::reloadShader()
 {
 	glDeleteProgram(m_program_id);
 	LoadShader("./shaders/lighting_vertex.glsl", 0,"./shaders/lighting_fragment.glsl", &m_program_id);
 }
 
-void Lighting::shutdown()
+void PhysicalBasedRendering::shutdown()
 {
 
 	cleanUpOpenGLBuffers();
@@ -63,7 +63,7 @@ void Lighting::shutdown()
 	Gizmos::destroy();
 	Application::shutdown();
 }
-bool Lighting::update()
+bool PhysicalBasedRendering::update()
 {
 	if (Application::update() == false)
 	{
@@ -97,7 +97,7 @@ bool Lighting::update()
 	return true;
 }
 
-void Lighting::draw()
+void PhysicalBasedRendering::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -113,6 +113,9 @@ void Lighting::draw()
 	int eye_pos_uniform = glGetUniformLocation(m_program_id, "eye_pos");
 	int specular_uniform = glGetUniformLocation(m_program_id, "specular_power");
 
+	int roughness_uniform = glGetUniformLocation(m_program_id, "roughness");
+
+	int fresnel_uniform = glGetUniformLocation(m_program_id, "FresnelScale");
 
 	int material_color_uniform = glGetUniformLocation(m_program_id, "material_color");
 	glUniform3fv(ambient_uniform, 1, (float*)&m_ambient_light);
@@ -125,6 +128,9 @@ void Lighting::draw()
 	glUniform3fv(eye_pos_uniform, 1, (float*)&camera_pos);
 
 	glUniform1f(specular_uniform, m_specular_power);
+
+	glUniform1f(roughness_uniform, 0.5f);
+	glUniform1f(fresnel_uniform, 1.f);
 
 
 
@@ -141,7 +147,7 @@ void Lighting::draw()
 	glfwPollEvents();
 }
 
-void Lighting::createOpenGLBuffers(std::vector<tinyobj::shape_t> &shapes)
+void PhysicalBasedRendering::createOpenGLBuffers(std::vector<tinyobj::shape_t> &shapes)
 {
 	m_gl_data.resize(shapes.size());
 	for (unsigned int shape_index = 0; shape_index < shapes.size(); ++shape_index)
@@ -186,7 +192,7 @@ void Lighting::createOpenGLBuffers(std::vector<tinyobj::shape_t> &shapes)
 	}
 }
 
-void Lighting::cleanUpOpenGLBuffers()
+void PhysicalBasedRendering::cleanUpOpenGLBuffers()
 {
 	glDeleteProgram(m_program_id);
 

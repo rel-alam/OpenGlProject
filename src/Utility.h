@@ -4,6 +4,7 @@
 #include "glm_header.h"
 #include "gl_core_4_4.h"
 #include <GLFW\glfw3.h>
+#include "Vertex.h"
 
 typedef unsigned int Gluint;
 
@@ -28,5 +29,7 @@ void OnMouseScroll(GLFWwindow* window, double x, double y);
 void OnKey(GLFWwindow* window, int key, int scancode, int pressed, int mod_keys);
 void OnChar(GLFWwindow* window, unsigned int c);
 void OnWindowResize(GLFWwindow*, int width, int height);
+
+OpenGLData LoadOBJ(char* filename);
 
 #endif // !ULTILITY_H

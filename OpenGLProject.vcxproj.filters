@@ -70,6 +70,12 @@
     <Filter Include="PerlinNoise">
       <UniqueIdentifier>{19e5f0ee-cf90-4da3-acb3-dbdb95f7b40e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="AdvancedNavigation">
+      <UniqueIdentifier>{fa1e2c3b-2a41-4f3f-8d01-53c1887d4cd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PBR">
+      <UniqueIdentifier>{49b0f568-813c-4e41-91c9-ac7ed9771392}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\gl_core_4_4.h">
@@ -83,9 +89,6 @@
     </ClInclude>
     <ClInclude Include="src\IntroToOpenGl.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\CameraAndProjection.h">
-      <Filter>Cameras</Filter>
     </ClInclude>
     <ClInclude Include="src\Camera.h">
       <Filter>Cameras</Filter>
@@ -170,6 +173,12 @@
     </ClInclude>
     <ClInclude Include="src\PerlinNoise.h">
       <Filter>PerlinNoise</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AdvancedNavigation.h">
+      <Filter>AdvancedNavigation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicallyBasedRendering.h">
+      <Filter>PBR</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -263,6 +272,12 @@
     <ClCompile Include="src\PerlinNoise.cpp">
       <Filter>PerlinNoise</Filter>
     </ClCompile>
+    <ClCompile Include="src\AdvancedNavigation.cpp">
+      <Filter>AdvancedNavigation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicallyBasedRendering.cpp">
+      <Filter>PBR</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\shaders\basic_vertex.glsl">
@@ -350,6 +365,24 @@
       <Filter>Resource Files\shaders</Filter>
     </None>
     <None Include="data\shaders\perlin_fragment.glsl">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="data\shaders\sponza.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="data\shaders\sponza.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="data\shaders\navmesh_fragment.glsl">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="data\shaders\navmesh_vertex.glsl">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="data\shaders\PBR_vertex.glsl">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="data\shaders\PBR_fragment.glsl">
       <Filter>Resource Files\shaders</Filter>
     </None>
   </ItemGroup>

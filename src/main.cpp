@@ -7,12 +7,12 @@
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
 
-#include "ProceduralGeneration.h"
+#include "PhysicallyBasedRendering.h"
 
 int main()
 {
 
-	ProceduralGeneration app;
+	PhysicalBasedRendering app;
 
 	if (app.startup() == false)
 	{
