@@ -278,6 +278,9 @@
     <ClCompile Include="src\PhysicallyBasedRendering.cpp">
       <Filter>PBR</Filter>
     </ClCompile>
+    <ClCompile Include="src\Cache.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\shaders\basic_vertex.glsl">
