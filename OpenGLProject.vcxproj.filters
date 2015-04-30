@@ -76,6 +76,9 @@
     <Filter Include="PBR">
       <UniqueIdentifier>{49b0f568-813c-4e41-91c9-ac7ed9771392}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameTreeSearch">
+      <UniqueIdentifier>{3d97adcc-dd7e-43d1-983a-9eda8566f7c4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\gl_core_4_4.h">
@@ -180,6 +183,15 @@
     <ClInclude Include="src\PhysicallyBasedRendering.h">
       <Filter>PBR</Filter>
     </ClInclude>
+    <ClInclude Include="src\AIBase.h">
+      <Filter>GameTreeSearch</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ConnectFour.h">
+      <Filter>GameTreeSearch</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameTreeSearch.h">
+      <Filter>GameTreeSearch</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gl_core_4_4.c">
@@ -278,8 +290,11 @@
     <ClCompile Include="src\PhysicallyBasedRendering.cpp">
       <Filter>PBR</Filter>
     </ClCompile>
-    <ClCompile Include="src\Cache.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\ConnectFour.cpp">
+      <Filter>GameTreeSearch</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameTreeSearch.cpp">
+      <Filter>GameTreeSearch</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

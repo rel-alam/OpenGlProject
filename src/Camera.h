@@ -34,6 +34,8 @@ public:
 	mat4 m_proj;
 	mat4 m_projView;
 	float m_sensitivity;
+
+	vec3 pickAgainstPlane(float x, float y, vec4 plane);
 };
 
 class FlyCamera : public Camera

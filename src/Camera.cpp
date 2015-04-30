@@ -127,3 +127,31 @@ void FlyCamera::setSpeed(float a_speed)
 {
 	m_speed = a_speed;
 }
+
+vec3 Camera::pickAgainstPlane(float x, float y, vec4 plane)
+{
+	float nxPos = x / 1280.0;
+	float nyPos = y / 720.0;
+
+	float sxPos = nxPos - 0.5;
+	float syPos = nyPos - 0.5;
+
+	float fxPos = sxPos * 2;
+	float fyPos = syPos * -2;
+
+	mat4 inv_viewproj = glm::inverse(m_projView);
+
+	vec4 mouse_pos(fxPos, fyPos, 1, 1);
+	vec4 world_pos = inv_viewproj * mouse_pos;
+
+	world_pos /= world_pos.w;
+
+	vec3 cam_pos = m_world[3].xyz();
+	vec3 dir = world_pos.xyz() - cam_pos;
+
+	float t = -(glm::dot(cam_pos, plane.xyz()) + plane.w) / (glm::dot(dir, plane.xyz()));
+
+	vec3 result = cam_pos + dir * t;
+
+	return result;
+}

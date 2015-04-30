@@ -7,12 +7,12 @@
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
 
-#include "PhysicallyBasedRendering.h"
+#include "GameTreeSearch.h"
 
 int main()
 {
 
-	PhysicalBasedRendering app;
+	GameTreeSearch app;
 
 	if (app.startup() == false)
 	{
