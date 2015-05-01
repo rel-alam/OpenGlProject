@@ -31,7 +31,8 @@ bool GameTreeSearch::startup()
 	m_game = new ConnectFour();
 
 	//create an AI just a random one
-	m_ai = new MCTS(15000);
+	m_ai = new MCTS(500);
+	m_ai2 = new MCTS(500);
 
 	return true;
 }
@@ -63,11 +64,11 @@ bool GameTreeSearch::update()
 	vec4 blue(0, 0, 1, 1);
 	vec4 yellow(1, 1, 0, 1);
 
-	for (int i = 0; i <= 20; ++i)
-	{
-		Gizmos::addLine(vec3(-10 + i, 0, -10), vec3(-10 + i, 0, 10), i == 10 ? white : black);
-		Gizmos::addLine(vec3(-10, 0, -10 + i), vec3(10, 0, -10 + i), i == 10 ? white : black);
-	}
+	//for (int i = 0; i <= 20; ++i)
+	//{
+	//	Gizmos::addLine(vec3(-10 + i, 0, -10), vec3(-10 + i, 0, 10), i == 10 ? white : black);
+	//	Gizmos::addLine(vec3(-10, 0, -10 + i), vec3(10, 0, -10 + i), i == 10 ? white : black);
+	//}
 
 
 	static bool moveMade = false;
@@ -81,12 +82,12 @@ bool GameTreeSearch::update()
 				if (moveMade == false)
 				{
 					moveMade = true;
-
+		
 					double x = 0, y = 0;
 					glfwGetCursorPos(m_window, &x, &y);
 					m_pickPosition = camera.pickAgainstPlane((float)x, (float)y, vec4(0, 1, 0, 0));
 					int column = (int)((m_pickPosition.z + ConnectFour::COLUMNS) / 2);
-
+		
 					if (m_game->isActionValid(column))
 						m_game->performAction(column);
 				}

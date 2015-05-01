@@ -19,6 +19,7 @@ public:
 
 	Game* m_game;
 	AI* m_ai;
+	AI* m_ai2;
 
 	GLFWwindow* m_window;
 

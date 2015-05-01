@@ -89,52 +89,49 @@ public:
 	{
 		std::vector<int> actions;
 		game.getValidActions(actions);
-		int startValue = 0;
+		if (actions.size() > 0)
+		{
+			float bestScore = -1;
+			int bestAction = -1;
 
-		int bestScore = 0;
-		int bestAction = 0;
-
-		std::vector<int> scores;
-
-
-		Game* clone;
 			for (int i = 0; i < actions.size(); ++i)
 			{
-				startValue = 0;
+				int score = 0;
 				for (int j = 0; j < m_playouts; ++j)
 				{
-					
-					clone = game.clone();
-					clone->performAction(i);
+					Game* clone = game.clone();
+					clone->performAction(actions[i]);
 					while (clone->getCurrentGameState() == Game::UNKNOWN)
 					{
-						clone->performAction(rand() % actions.size());
+						std::vector<int> nextActions;
+						clone->getValidActions(nextActions);
+						clone->performAction(nextActions[rand() % nextActions.size()]);
+					}
+					if (clone->getCurrentGameState() == Game::PLAYER_ONE)
+					{
+						score--;
 					}
 					if (clone->getCurrentGameState() == Game::PLAYER_TWO)
 					{
-						startValue++;
+						score++;
 					}
-					else if (clone->getCurrentGameState() == Game::PLAYER_ONE)
-					{
-						startValue--;
-					}
-					
 					delete clone;
 				}
-			
-				scores.push_back((float)m_playouts / (float)startValue);
-			}
-
-			for (int i = 0; i < scores.size(); ++i)
-			{
-				if (scores[i] > bestScore)
+				float tempScore = (float)score / (float)m_playouts;
+				if (bestAction == -1 || tempScore > bestScore)
 				{
-					bestScore = scores[i];
 					bestAction = i;
+					bestScore = tempScore;
 				}
-					
 			}
-			return bestAction;
+			return actions[bestAction];
+			
+		}
+		else
+		{
+			return -1;
+		}
+
 	}
 
 private:
