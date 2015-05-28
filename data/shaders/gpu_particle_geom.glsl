@@ -28,7 +28,7 @@ void main()
 	//interpolate to find the correct color
 	frag_color = mix(color_start, color_end, t);
 	//half the size so that the ttotal width of the quad would be correct
-	float half_size = 1;//mix(size_start, size_end, t) * 0.5f;
+	float half_size = mix(size_start, size_end, t) * 0.5f;
 
 	vec3 corners[4];
 	corners[0] = vec3 (half_size, -half_size,0);
