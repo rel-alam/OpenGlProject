@@ -7,12 +7,12 @@
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
 
-#include "GameTreeSearch.h"
+#include "Lighting.h"
 
 int main()
 {
 
-	GameTreeSearch app;
+	Lighting app;
 
 	if (app.startup() == false)
 	{

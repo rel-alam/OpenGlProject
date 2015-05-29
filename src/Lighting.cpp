@@ -23,7 +23,7 @@ bool Lighting::startup()
 
 	m_camera = FlyCamera();
 	m_camera.setLookAt(vec3(10, 10, 10), vec3(0, 0, 0), vec3(0, 1, 0));
-	m_camera.setSpeed(1);
+	m_camera.setSpeed(15);
 	m_camera.setPrespective(60, 1280 / 720, 0.1f, 1000.f);
 
 	LoadShader("./shaders/lighting_vertex.glsl", 0,"./shaders/lighting_fragment.glsl", &m_program_id);
@@ -146,6 +146,10 @@ void Lighting::createOpenGLBuffers(std::vector<tinyobj::shape_t> &shapes)
 	m_gl_data.resize(shapes.size());
 	for (unsigned int shape_index = 0; shape_index < shapes.size(); ++shape_index)
 	{
+
+
+
+
 		std::vector<float> vertex_data;
 
 		unsigned int float_count = shapes[shape_index].mesh.positions.size();
@@ -155,9 +159,39 @@ void Lighting::createOpenGLBuffers(std::vector<tinyobj::shape_t> &shapes)
 
 		vertex_data.insert(vertex_data.end(), shapes[shape_index].mesh.positions.begin(), shapes[shape_index].mesh.positions.end());
 
+		
+
+
+		float a = 0;
+		float b = 0;
+		float c = 0;
+
+		auto& pos_vector = shapes[shape_index].mesh.positions;
+
+		for (int i = 0; i < shapes[shape_index].mesh.indices.size(); i++)
+		{
+			int index = shapes[shape_index].mesh.indices[i];
+
+			a = pos_vector[index * 3 + 0];
+			b = pos_vector[index * 3 + 1];
+			c = pos_vector[index * 3 + 2];
+
+			m_verticies.push_back(vec3(a, b, c));
+		}
+		for (int i = 2; i < m_verticies.size(); i += 3)
+		{
+			//m_normals.push_back(glm::cross((m_verticies.at(i + 1) - m_verticies.at(i)), (m_verticies.at(i + 2) - m_verticies.at(i))));
+			vec3 a = glm::cross((m_verticies[i-1] - m_verticies[i]), (m_verticies[i-2] - m_verticies[i]));
+			m_normals.push_back(a);
+			m_normals.push_back(a);
+			m_normals.push_back(a);
+		}
+
 		vertex_data.insert(vertex_data.end(), shapes[shape_index].mesh.normals.begin(), shapes[shape_index].mesh.normals.end());
 
 		m_gl_data[shape_index].m_index_count = shapes[shape_index].mesh.indices.size();
+		
+		
 
 		glGenVertexArrays(1, &m_gl_data[shape_index].m_VAO);
 		glGenBuffers(1, &m_gl_data[shape_index].m_VBO);
@@ -176,7 +210,7 @@ void Lighting::createOpenGLBuffers(std::vector<tinyobj::shape_t> &shapes)
 
 
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, 0, (void*)(sizeof(float)* shapes[shape_index].mesh.positions.size()));
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, 0, (void*)(sizeof(vec3)* shapes[shape_index].mesh.positions.size()));
 
 		glBindVertexArray(0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
