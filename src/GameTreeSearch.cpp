@@ -31,8 +31,7 @@ bool GameTreeSearch::startup()
 	m_game = new ConnectFour();
 
 	//create an AI just a random one
-	m_ai = new MCTS(500);
-	m_ai2 = new MCTS(500);
+	m_ai = new MCTS(100);
 
 	return true;
 }

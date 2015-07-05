@@ -26,12 +26,12 @@ bool PhysicalBasedRendering::startup()
 	m_camera.setSpeed(15);
 	m_camera.setPrespective(60, 1280 / 720, 0.1f, 1000.f);
 
-	LoadShader("./shaders/PBR_vertex.glsl", 0,"./shaders/PBR_fragment.glsl", &m_program_id);
+	LoadShader("./data/shaders/PBR_vertex.glsl", 0,"./data/shaders/PBR_fragment.glsl", &m_program_id);
 
 	std::vector<tinyobj::shape_t> shapes;
 	std::vector<tinyobj::material_t> materials;
 
-	std::string err = tinyobj::LoadObj(shapes, materials, "./models/stanford/dragon.obj");
+	std::string err = tinyobj::LoadObj(shapes, materials, "./data/models/stanford/dragon.obj");
 
 	if (err.size() != 0)
 	{
@@ -51,7 +51,7 @@ bool PhysicalBasedRendering::startup()
 void PhysicalBasedRendering::reloadShader()
 {
 	glDeleteProgram(m_program_id);
-	LoadShader("./shaders/lighting_vertex.glsl", 0,"./shaders/lighting_fragment.glsl", &m_program_id);
+	LoadShader("./data/shaders/lighting_vertex.glsl", 0,"./data/shaders/lighting_fragment.glsl", &m_program_id);
 }
 
 void PhysicalBasedRendering::shutdown()

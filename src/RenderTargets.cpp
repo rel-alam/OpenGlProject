@@ -21,7 +21,7 @@ bool RenderTargets::startup()
 	Gizmos::create();
 	generateFrameBuffer();
 	generatePlane();
-	LoadShader("./shaders/textured_vertex.glsl", 0, "./shaders/textured_fragment.glsl", &m_program_id);
+	LoadShader("./data/shaders/textured_vertex.glsl", 0, "./data/shaders/textured_fragment.glsl", &m_program_id);
 
 
 	camera = FlyCamera();

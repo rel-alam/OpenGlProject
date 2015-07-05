@@ -26,12 +26,12 @@ bool Animation::startup()
 	camera.setPrespective(60, 1280 / 720, 0.1f, 1000.f);
 
 	m_file = new FBXFile();
-	m_file->load("./models/characters/Pyro/pyro.fbx");
+	m_file->load("./data/models/characters/Pyro/pyro.fbx");
 	m_file->initialiseOpenGLTextures();
 
 	GenerateGLMeshes(m_file);
 
-	LoadShader("./shaders/skinned_vertex.glsl",0 ,"./shaders/skinned_fragment.glsl", &m_program_id);
+	LoadShader("./data/shaders/skinned_vertex.glsl",0 ,"./data/shaders/skinned_fragment.glsl", &m_program_id);
 
 
 

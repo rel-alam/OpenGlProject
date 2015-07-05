@@ -85,7 +85,7 @@ void GPUPointEmitter::CreateBuffers()
 void GPUPointEmitter::CreateUpdateShader()
 {
 	unsigned int vertex_shader;
-	LoadShaderType("./shaders/particle_update_vert.glsl", GL_VERTEX_SHADER, &vertex_shader);
+	LoadShaderType("./data/shaders/particle_update_vert.glsl", GL_VERTEX_SHADER, &vertex_shader);
 
 	m_update_shader = glCreateProgram();
 	glAttachShader(m_update_shader,vertex_shader);
@@ -103,7 +103,7 @@ void GPUPointEmitter::CreateUpdateShader()
 }
 void GPUPointEmitter::CreateDrawShader()
 {
-	LoadShader("./shaders/gpu_particle_vert.glsl", "./shaders/gpu_particle_geom.glsl", "./shaders/gpu_particle_frag.glsl", &m_draw_shader);
+	LoadShader("./data/shaders/gpu_particle_vert.glsl", "./data/shaders/gpu_particle_geom.glsl", "./data/shaders/gpu_particle_frag.glsl", &m_draw_shader);
 }
 
 

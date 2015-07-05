@@ -44,12 +44,14 @@
     <IncludePath>./deps/glfw/include;./deps/AntTweakBar/include;./deps/glm;./deps/FBXLoader;$(IncludePath)</IncludePath>
     <LibraryPath>./deps/glfw/lib-vc2013;./deps/AntTweakBar/lib;./deps/FBXLoader;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)build\</OutDir>
+    <TargetName>$(ProjectName)\data</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>./deps/glfw/include;./deps/AntTweakBar/include;./deps/glm;./deps/FBXLoader;$(IncludePath)</IncludePath>
     <LibraryPath>./deps/glfw/lib-vc2013;./deps/AntTweakBar/lib;./deps/FBXLoader;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)build\</OutDir>
+    <TargetName>$(ProjectName)\data</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

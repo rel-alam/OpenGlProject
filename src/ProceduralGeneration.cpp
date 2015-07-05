@@ -52,7 +52,7 @@ bool ProceduralGeneration::startup()
 
 
 
-	LoadShader("./shaders/perlin_vertex.glsl", 0, "./shaders/perlin_fragment.glsl", &m_program_id);
+	LoadShader("./data/shaders/perlin_vertex.glsl", 0, "./data/shaders/perlin_fragment.glsl", &m_program_id);
 
 	return true;
 }
