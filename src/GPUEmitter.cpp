@@ -85,7 +85,7 @@ void GPUPointEmitter::CreateBuffers()
 void GPUPointEmitter::CreateUpdateShader()
 {
 	unsigned int vertex_shader;
-	LoadShaderType("./data/shaders/particle_update_vert.glsl", GL_VERTEX_SHADER, &vertex_shader);
+	LoadShaderType("./shaders/particle_update_vert.glsl", GL_VERTEX_SHADER, &vertex_shader);
 
 	m_update_shader = glCreateProgram();
 	glAttachShader(m_update_shader,vertex_shader);
@@ -103,11 +103,11 @@ void GPUPointEmitter::CreateUpdateShader()
 }
 void GPUPointEmitter::CreateDrawShader()
 {
-	LoadShader("./data/shaders/gpu_particle_vert.glsl", "./data/shaders/gpu_particle_geom.glsl", "./data/shaders/gpu_particle_frag.glsl", &m_draw_shader);
+	LoadShader("./shaders/gpu_particle_vert.glsl", "./shaders/gpu_particle_geom.glsl", "./shaders/gpu_particle_frag.glsl", &m_draw_shader);
 }
 
 
-void GPUPointEmitter::Draw(float time, mat4 a_camera_transform, mat4 a_projection_view)
+void GPUPointEmitter::Draw(float time, mat4 a_camera_transform, mat4 a_projection_view, vec3 pos)
 {
 	//uniform float delta_time;
 	//uniform vec3 emitter_position;
@@ -117,7 +117,7 @@ void GPUPointEmitter::Draw(float time, mat4 a_camera_transform, mat4 a_projectio
 	//uniform float max_lifespan;
 	//uniform float time;
 
-
+	m_position = pos;
 	//update vertex pass
 	glUseProgram(m_update_shader);
 

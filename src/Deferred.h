@@ -1,22 +1,21 @@
 #ifndef _DEFERRED_H_
 #define _DEFERRED_H_
 
-#include "Application.h"
 #include "Camera.h"
 #include "Vertex.h"
 #include "AntTweakBar.h"
 
-class Deferred : public Application
+class Deferred
 {
 public:
-	virtual bool startup();
-	virtual void shutdown();
+	bool startup();
+	void shutdown();
 
-	virtual bool update();
-	virtual void draw();
+	bool update();
+	void draw(FlyCamera camera);
 
-	void renderDirectionalLight(vec3 light_dir, vec3 light_color);
-	void renderPointLight(vec3 position, float radius, vec3 light_color);
+	void renderDirectionalLight(vec3 light_dir, vec3 light_color, FlyCamera camera);
+	void renderPointLight(vec3 position, float radius, vec3 light_color, FlyCamera camera);
 
 	void buildMesh();
 	void buildQuad();
@@ -47,10 +46,6 @@ public:
 	unsigned int m_point_light_program;
 	unsigned int m_spot_light_program;
 	unsigned int m_composite_program;
-
-	FlyCamera camera;
-
-	TwBar* m_bar;
 
 };
 

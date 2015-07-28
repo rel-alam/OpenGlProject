@@ -24,4 +24,9 @@ void main()
 	float d = max(0, dot(-light_dir, normal_sample));
 
 	out_color = light_color * d;
+	//out_color = N;
+	//out_color = vec3(d);
+	//out_color = light_color;
+	//out_color = normal_sample;
+
 }

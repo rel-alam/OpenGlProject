@@ -12,5 +12,5 @@ void main()
 	vec4 albedo_sample = texture(albedo_tex, frag_texcoord);
 	vec4 light_sample = texture(light_tex, frag_texcoord);
 
-	out_color = albedo_sample * light_sample;
+	out_color =  albedo_sample * light_sample;
 }

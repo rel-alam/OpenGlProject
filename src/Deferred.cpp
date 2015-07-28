@@ -15,40 +15,14 @@
 
 bool Deferred::startup()
 {
-	if (Application::startup() == false)
-	{
-		return false;
-	}
 
-	TwInit(TW_OPENGL_CORE, nullptr);
-	TwWindowSize(1280, 720);
-
-	glfwSetMouseButtonCallback(m_window, OnMouseButton);
-	glfwSetCursorPosCallback(m_window, OnMousePosition);
-	glfwSetScrollCallback(m_window, OnMouseScroll);
-	glfwSetKeyCallback(m_window, OnKey);
-	glfwSetCharCallback(m_window, OnChar);
-	glfwSetWindowSizeCallback(m_window, OnWindowResize);
-
-	glClearColor(0.3f, 0.3f, 0.3f, 1);
-	glEnable(GL_DEPTH_TEST);
-
-
-
-
-	Gizmos::create();
-
-	camera = FlyCamera();
-	camera.setLookAt(vec3(10, 10, 10), vec3(0, 0, 0), vec3(0, 1, 0));
-	camera.setSpeed(40);
-	camera.setPrespective(60, 1280 / 720, 0.1f, 1000.f);
 
 	buildMesh();
 	buildQuad();
 	buildCube();
 	buildGBuffer();
 	buildLightBuffer();
-	
+
 
 	LoadShader("./shaders/gBuffer_vertex.glsl", 0, "./shaders/gBuffer_fragment.glsl", &m_gbuffer_program);
 
@@ -58,64 +32,32 @@ bool Deferred::startup()
 
 	LoadShader("./shaders/point_light_vertex.glsl", 0, "./shaders/point_light_fragment.glsl", &m_point_light_program);
 
-
-	m_bar = TwNewBar("My New Awesome Bar!!!!!!!");
-
-
-
-	glEnable(GL_CULL_FACE);
+	
 
 	return true;
 }
 
 void Deferred::shutdown()
 {
-	Gizmos::destroy();
-	TwDeleteAllBars();
-	TwTerminate();
-	Application::shutdown();
+
 }
 bool Deferred::update()
 {
-	if (Application::update() == false)
-	{
-		return false;
-	}
-	Gizmos::clear();
-
-
-	float dt = (float)glfwGetTime();
-	glfwSetTime(0.0);
-
-	camera.update(dt);
-
-	vec4 white(1);
-	vec4 black(0, 0, 0, 1);
-	vec4 green(0, 1, 0, 1);
-	vec4 red(1, 0, 0, 1);
-	vec4 blue(0, 0, 1, 1);
-	vec4 yellow(1, 1, 0, 1);
-
-	for (int i = 0; i <= 20; ++i)
-	{
-		Gizmos::addLine(vec3(-10 + i, 0, -10), vec3(-10 + i, 0, 10), i == 10 ? white : black);
-		Gizmos::addLine(vec3(-10, 0, -10 + i), vec3(10, 0, -10 + i), i == 10 ? white : black);
-	}
-
 	return true;
 }
 
-void Deferred::draw()
+void Deferred::draw(FlyCamera camera)
 {
+	glEnable(GL_CULL_FACE);
 
 	glEnable(GL_DEPTH_TEST);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, m_gbuffer_fbo);
-	
+
 
 	glClearColor(0, 0, 0, 0);
 
-	glClear( GL_DEPTH_BUFFER_BIT);
+	glClear(GL_DEPTH_BUFFER_BIT);
 
 
 	vec4 clear_color = vec4(0, 0, 0, 0);
@@ -141,7 +83,7 @@ void Deferred::draw()
 	// Light
 	glBindFramebuffer(GL_FRAMEBUFFER, m_light_fbo);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
+
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_ONE, GL_ONE);
@@ -161,9 +103,9 @@ void Deferred::draw()
 	glBindTexture(GL_TEXTURE_2D, m_normals_texture);
 
 
-	//renderDirectionalLight(vec3(1, 0, 0), vec3(1, 0, 0));
-	//renderDirectionalLight(vec3(0, 1, 0), vec3(0, 1, 0));
-	//renderDirectionalLight(vec3(0, 0, 1), vec3(0, 0, 1));
+	renderDirectionalLight(vec3(1, 0, 0), vec3(1, 0, 0), camera);
+	renderDirectionalLight(vec3(0, 1, 0), vec3(0, 1, 0), camera);
+	renderDirectionalLight(vec3(0, 0, 1), vec3(0, 0, 1), camera);
 
 	glUseProgram(m_point_light_program);
 	view_proj_uniform = glGetUniformLocation(m_point_light_program, "proj_view");
@@ -183,9 +125,9 @@ void Deferred::draw()
 
 	//draw the point lights
 	vec3 lightpos = vec3(1, 8, 0);
-	renderPointLight(vec3(1, 8, 0), 15, vec3(0, 1, 1));
-	renderPointLight(vec3(1, 8, 0), 15, vec3(1, 1, 1));
-	renderPointLight(vec3(0, 0, 1), 15, vec3(1, 1, 0));
+	renderPointLight(vec3(1, 8, 0), 150, vec3(0, 1, 1), camera);
+	//renderPointLight(vec3(1, 8, 0), 15, vec3(1, 1, 1), camera);
+	//renderPointLight(vec3(0, 0, 1), 15, vec3(1, 1, 0), camera);
 
 	glDisable(GL_BLEND);
 
@@ -196,7 +138,7 @@ void Deferred::draw()
 	glClearColor(0.3, 0.3, 0.3, 1);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
+
 	glUseProgram(m_composite_program);
 
 	int albedo_tex_uniform = glGetUniformLocation(m_composite_program, "albedo_tex");
@@ -216,12 +158,8 @@ void Deferred::draw()
 
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-	
+	glDisable(GL_CULL_FACE);
 
-	//Gizmos::draw(camera.getProjectionView());
-	TwDraw();
-	glfwSwapBuffers(m_window);
-	glfwPollEvents();
 }
 
 
@@ -229,7 +167,7 @@ void Deferred::buildMesh()
 {
 	std::vector<tinyobj::shape_t> shapes;
 	std::vector<tinyobj::material_t> materials;
-	tinyobj::LoadObj(shapes, materials, "./models/stanford/bunny.obj");
+	tinyobj::LoadObj(shapes, materials, "./models/stanford/dragon.obj");
 
 	m_bunny.m_index_count = shapes[0].mesh.indices.size();
 
@@ -358,9 +296,9 @@ void Deferred::buildQuad()
 	float vertex_data[]
 	{
 		-1, -1, 0, 1, half_texel.x, half_texel.y,
-		 1, -1, 0, 1, 1 - half_texel.x, half_texel.y,
-		 1,  1, 0, 1, 1 - half_texel.x, 1 - half_texel.y,
-		-1,  1, 0, 1, half_texel.x, 1 - half_texel.y,
+			1, -1, 0, 1, 1 - half_texel.x, half_texel.y,
+			1, 1, 0, 1, 1 - half_texel.x, 1 - half_texel.y,
+			-1, 1, 0, 1, half_texel.x, 1 - half_texel.y,
 	};
 
 	unsigned int index_data[] =
@@ -398,14 +336,14 @@ void Deferred::buildCube()
 	float vertex_data[]
 	{
 		-1, -1, 1, 1,
-		1, -1, 1, 1,
-		1, -1, -1, 1,
-		-1, -1, -1, 1,
+			1, -1, 1, 1,
+			1, -1, -1, 1,
+			-1, -1, -1, 1,
 
-		- 1, 1, 1, 1,
-		1, 1, 1, 1,
-		1, 1, -1, 1,
-		-1, 1, -1, 1
+			-1, 1, 1, 1,
+			1, 1, 1, 1,
+			1, 1, -1, 1,
+			-1, 1, -1, 1
 
 	};
 
@@ -448,7 +386,7 @@ void Deferred::buildCube()
 }
 
 
-void Deferred::renderDirectionalLight(vec3 light_dir, vec3 light_color)
+void Deferred::renderDirectionalLight(vec3 light_dir, vec3 light_color, FlyCamera camera)
 {
 	//vec3 light_dir = vec3(0, -1, 0);
 	vec4 viewspace_light_dir = camera.m_view * vec4(light_dir, 0);
@@ -464,7 +402,7 @@ void Deferred::renderDirectionalLight(vec3 light_dir, vec3 light_color)
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
-void Deferred::renderPointLight(vec3 position, float radius, vec3 light_color)
+void Deferred::renderPointLight(vec3 position, float radius, vec3 light_color, FlyCamera camera)
 {
 	vec4 view_space_pos = camera.m_view * vec4(position, 1);
 

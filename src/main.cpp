@@ -7,21 +7,13 @@
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
 
-#include "ProceduralGeneration.h"
-#include "Animation.h"
-#include "GPUParticles.h"
-#include "PhysicallyBasedRendering.h"
-#include "RenderTargets.h"
+#include "Assignment.h"
+
 
 
 int main()
 {
-	//OpenGlStuff
-	//RenderTargets app;
-	//PhysicalBasedRendering app;
-	//GPUParticles app;
-	//Animation app;
-	ProceduralGeneration app;
+	Assignment app;
 
 	if (app.startup() == false)
 	{

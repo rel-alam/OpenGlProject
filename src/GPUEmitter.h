@@ -33,7 +33,7 @@ public:
 		float a_start_size, float a_end_size,
 		vec4 a_start_color, vec4 a_end_color);
 
-	void Draw(float time, mat4 a_camera_transform, mat4 a_projection_view);
+	void Draw(float time, mat4 a_camera_transform, mat4 a_projection_view, vec3 pos);
 
 	void CreateBuffers();
 	void CreateUpdateShader();

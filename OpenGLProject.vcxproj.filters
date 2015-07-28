@@ -192,6 +192,9 @@
     <ClInclude Include="src\GameTreeSearch.h">
       <Filter>GameTreeSearch</Filter>
     </ClInclude>
+    <ClInclude Include="src\Assignment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gl_core_4_4.c">
@@ -295,6 +298,9 @@
     </ClCompile>
     <ClCompile Include="src\GameTreeSearch.cpp">
       <Filter>GameTreeSearch</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Assignment.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

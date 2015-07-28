@@ -5,35 +5,39 @@ in vec2 frag_texcoord;
 out vec4 frag_color;
 
 uniform sampler2D perlin_texture;
+uniform sampler2D grass_texture;
+uniform sampler2D water_texture;
+uniform sampler2D snow_texture;
+
+layout(location = 0) out vec3 gPassAlbedo;
+layout(location = 1) out vec3 gPassPosition;
+layout(location = 2) out vec3 gPassNormal;
+
+in vec3 fPosition;
+in vec3 fNormal;
 
 void main()
 {
 
 	float perlin_sample = texture(perlin_texture, frag_texcoord).r;
-	//frag_color = texture(perlin_texture, frag_texcoord).rrrr;
 
-	vec4 red = vec4(1, 0, 0, 1);
-	vec4 blue = vec4(0, 0, 1, 1);
-	vec4 green = vec4(0, 1, 0, 1);
-	vec4 white = vec4(1,1, 1, 1);
-	vec4 black = vec4(0, 0, 0, 1);
-
-	if (perlin_sample > 1)
+	if (perlin_sample > 0.79)
 	{
-		frag_color = white;
+		gPassAlbedo = texture(snow_texture, frag_texcoord).rgb;
+		gPassPosition = fPosition.xyz;
+		gPassNormal = fNormal.xyz * 0.5 + 0.5f;
 	}
-	else if (perlin_sample > 0.9 && perlin_sample <= 1.2)
+	else if (perlin_sample > 0.4 && perlin_sample < 0.8)
 	{
-		frag_color = mix(green, white, perlin_sample);
-	}
-	else if (perlin_sample > 0.7 && perlin_sample < 0.91)
-	{
-		frag_color = green;
+		gPassAlbedo = texture(grass_texture, frag_texcoord).rgb;
+		gPassPosition = fPosition.xyz;
+		gPassNormal = fNormal.xyz* 0.5 + 0.5f;
 	}
 	else
 	{
-		frag_color = blue;
+		gPassAlbedo = texture(water_texture, frag_texcoord).rgb;
+		gPassPosition = fPosition.xyz;
+		gPassNormal = fNormal.xyz* 0.5 + 0.5f;
 	}
-	frag_color.a = 1;
 	
 }

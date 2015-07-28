@@ -34,6 +34,10 @@ void main()
 	//output lambert * falloff * color;
 
 	light_output = d * falloff * light_diffuse;
-
+	//light_output = normal_sample;
+	//light_output = light_diffuse;
+	//light_output = vec3(d);
+	//light_output = L;
+	//light_output = position_sample;
 
 }

@@ -7,52 +7,33 @@
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
 
+#include "stb_image.h"
+
+
 bool ProceduralGeneration::startup()
 {
-	if (Application::startup() == false)
-	{
-		return false;
-	}
-	m_draw_gizmos = true;
+	a_realDims = vec2(128, 128);
+	realDims = a_realDims;
 
-	TwInit(TW_OPENGL_CORE, nullptr);
-	TwWindowSize(1280, 720);
+	a_dims = glm::ivec2(128, 128);
+	dims = a_dims;
 
-	glClearColor(0.3f, 0.3f, 0.3f, 1);
-	glEnable(GL_DEPTH_TEST);
+	buildGrid(realDims, dims);
+	buildPerlinTexture(dims, 8, 0.3f);
+	m_scale = 10; 
 
-	glfwSetMouseButtonCallback(m_window, OnMouseButton);
-	glfwSetCursorPosCallback(m_window, OnMousePosition);
-	glfwSetScrollCallback(m_window, OnMouseScroll);
-	glfwSetKeyCallback(m_window, OnKey);
-	glfwSetCharCallback(m_window, OnChar);
-	glfwSetWindowSizeCallback(m_window, OnWindowResize);
+	loadTexture("./textures/grass.jpg", m_grass_texture);
+	loadTexture("./textures/water.jpg", m_water_texture);
+	loadTexture("./textures/snow.jpg", m_snow_texture);
+
+	LoadShader("./shaders/perlin_vertex.glsl", 0, "./shaders/perlin_fragment.glsl", &m_program_id);
 
 
-
-	Gizmos::create();
-
-	camera = FlyCamera();
-	camera.setLookAt(vec3(10, 10, 10), vec3(0, 0, 0), vec3(0, 1, 0));
-	camera.setSpeed(40);
-	camera.setPrespective(60, 1280 / 720, 0.1f, 1000.f);
-
-	buildGrid(vec2(64, 64), glm::ivec2(64, 64));
-	buildPerlinTexture(glm::ivec2(64, 64), 5, 0.3f);
-	m_scale = 3; 
-
-
-	m_bar = TwNewBar("Control Panel");
-
-	TwAddVarRW(m_bar, "Set Scale", TW_TYPE_FLOAT, &m_scale, "");
-
-	TwAddVarRW(m_bar, "Draw Gizmos", TW_TYPE_BOOL8, &m_draw_gizmos, "");
-	TwAddVarRO(m_bar, "FPS", TW_TYPE_FLOAT, &m_fps, "");
-
-
-
-
-	LoadShader("./data/shaders/perlin_vertex.glsl", 0, "./data/shaders/perlin_fragment.glsl", &m_program_id);
+	m_ambient_light = vec3(0.1f);
+	m_light_dir = vec3(0, -1, 0);
+	m_light_color = vec3(0.6f, 0, 0);
+	m_material_color = vec3(1);
+	m_specular_power = 15;
 
 	return true;
 }
@@ -60,7 +41,7 @@ bool ProceduralGeneration::startup()
 void ProceduralGeneration::buildPerlinTexture(glm::ivec2 dims, int octaves, float persistance)
 {
 	//set scale
-	float scale = (1.0f / dims.x) * 5.0f;
+	float scale = (1.0f / dims.x) * 3.0f;
 	//allocate memory for perlin data
 	m_perlin_data = new float[dims.x * dims.y];
 
@@ -69,19 +50,18 @@ void ProceduralGeneration::buildPerlinTexture(glm::ivec2 dims, int octaves, floa
 	{
 		for (int x = 0; x < dims.x; ++x)
 		{
-			float amplitude = 1;
-			float freq = 1;
+			float amplitude = 1.f;
+			
 			m_perlin_data[y * dims.x + x] = 0;
 
 			for (int o = 0; o < octaves; ++o)
 			{
-				//call glm::perlin function	
-				float perlin_sample = glm::perlin(vec2(x, y) * scale * freq) * 0.5f + 0.5f;
-				perlin_sample *= amplitude;
-				m_perlin_data[y * dims.x + x] += perlin_sample;
+		//		call glm::perlin function	
+				float freq = powf(2, (float)o);
+				float perlin_sample = glm::perlin(vec2((float)x, (float)y) * scale * freq) * 0.5f + 0.5f;
+				m_perlin_data[y * dims.x + x] += perlin_sample * amplitude;
 
 				amplitude *= persistance;
-				freq *= 2.0f;
 			}
 			
 		} 
@@ -89,7 +69,7 @@ void ProceduralGeneration::buildPerlinTexture(glm::ivec2 dims, int octaves, floa
 	}
 		
 
-	//generate opnegl texture handles
+//	generate opnegl texture handles
 	glGenTextures(1, &m_perlin_texture);
 	glBindTexture(GL_TEXTURE_2D, m_perlin_texture);
 
@@ -114,19 +94,19 @@ void ProceduralGeneration::buildGrid(vec2 real_dims, glm::ivec2 dims)
 	//allocate vertex data
 	VertexTexCoord* vertex_data = new VertexTexCoord[vertex_count];
 
-	//compute how many indicies we need
+//	compute how many indicies we need
 	unsigned int index_count = dims.x * dims.y * 6;
-	//allocate index data
+//	allocate index data
 	unsigned int *index_data = new unsigned int[index_count];
 
 	float curr_y = -real_dims.y / 2.0f;
-	//two nested for loops
+///	two nested for loops
 	for (int y = 0; y < dims.y + 1; ++y)
 	{
 		float curr_x = -real_dims.x / 2.0f;;
 		for (int x = 0; x < dims.x + 1; ++x)
 		{
-			//inside we create our points
+		//	inside we create our points
 			vertex_data[y * (dims.x + 1) + x].position = vec4(curr_x, 0, curr_y, 1);
 			vertex_data[y * (dims.x + 1) + x].tex_coord = vec2((float)x / (float)dims.x, (float)y / (float)dims.y);
 
@@ -141,7 +121,7 @@ void ProceduralGeneration::buildGrid(vec2 real_dims, glm::ivec2 dims)
 	{
 		for (int x = 0; x < dims.x; ++x)
 		{
-			//create our 6 indicies here
+		//	create our 6 indicies here
 			index_data[curr_index++] = y * (dims.x + 1) + x;
 			index_data[curr_index++] = (y + 1) * (dims.x + 1) + x;
 			index_data[curr_index++] = (y + 1) * (dims.x + 1) + (x + 1);
@@ -175,7 +155,7 @@ void ProceduralGeneration::buildGrid(vec2 real_dims, glm::ivec2 dims)
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(VertexTexCoord), (void*)sizeof(vec4));
 
 
-	//unbind stuff
+//	unbind stuff
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -192,77 +172,59 @@ void ProceduralGeneration::shutdown()
 {
 	Gizmos::destroy();
 }
+
 bool ProceduralGeneration::update()
 {
-	if (Application::update() == false)
+	if (realDims != a_realDims)
 	{
-		return false;
-	}
-	Gizmos::clear();
-
-
-	float dt = (float)glfwGetTime();
-	glfwSetTime(0.0);
-
-	m_fps = 1 / dt;
-
-
-	if (glfwGetKey(m_window, GLFW_KEY_Z))
-	{
-		m_scale += 5 * dt;
-	}
-	if (glfwGetKey(m_window, GLFW_KEY_X))
-	{
-		m_scale -= 5 * dt;
+		realDims = a_realDims;
+		buildGrid(realDims, dims);
 	}
 
-
-	camera.update(dt);
-
-	vec4 white(1);
-	vec4 black(0, 0, 0, 1);
-	vec4 green(0, 1, 0, 1);
-	vec4 red(1, 0, 0, 1);
-	vec4 blue(0, 0, 1, 1);
-	vec4 yellow(1, 1, 0, 1);
-
-	for (int i = 0; i <= 20; ++i)
+	if (dims != a_dims)
 	{
-		Gizmos::addLine(vec3(-10 + i, 0, -10), vec3(-10 + i, 0, 10), i == 10 ? white : black);
-		Gizmos::addLine(vec3(-10, 0, -10 + i), vec3(10, 0, -10 + i), i == 10 ? white : black);
+		dims = a_dims;
+		buildPerlinTexture(dims, 8, 0.3f);
 	}
-
-	
-
 	return true;
 }
 
-void ProceduralGeneration::draw()
+void ProceduralGeneration::draw(FlyCamera a_camera)
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	glUseProgram(m_program_id);
 
 	int view_proj_uniform = glGetUniformLocation(m_program_id, "view_proj");
-	glUniformMatrix4fv(view_proj_uniform, 1, GL_FALSE, (float*)&camera.m_projView);
+	glUniformMatrix4fv(view_proj_uniform, 1, GL_FALSE, (float*)&a_camera.m_projView);
+
+	int world_uniform = glGetUniformLocation(m_program_id, "world");
+	glUniformMatrix4fv(world_uniform, 1, GL_FALSE, (float*)&a_camera.m_world);
+
+	int view_uniform = glGetUniformLocation(m_program_id, "view");
+	glUniformMatrix4fv(view_uniform, 1, GL_FALSE, (float*)&a_camera.m_view);
 
 	int tex_uniform = glGetUniformLocation(m_program_id, "perlin_texture");
 	glUniform1i(tex_uniform, 0);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, m_perlin_texture);
 
+	int grass_tex_uniform = glGetUniformLocation(m_program_id, "grass_texture");
+	glUniform1i(grass_tex_uniform, 1);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, m_grass_texture);
+
+	int water_tex_uniform = glGetUniformLocation(m_program_id, "water_texture");
+	glUniform1i(water_tex_uniform, 2);
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, m_water_texture);
+
+	int snow_tex_uniform = glGetUniformLocation(m_program_id, "snow_texture");
+	glUniform1i(snow_tex_uniform, 3);
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, m_snow_texture);
+
 	int scale_uniform = glGetUniformLocation(m_program_id, "scale");
 	glUniform1f(scale_uniform, m_scale);
 
 	glBindVertexArray(m_plane_mesh.m_VAO);
 	glDrawElements(GL_TRIANGLES, m_plane_mesh.m_index_count, GL_UNSIGNED_INT, 0);
-
-	if (m_draw_gizmos)
-	{
-		Gizmos::draw(camera.getProjectionView());
-	}
-
-	TwDraw();
-	glfwSwapBuffers(m_window);
-	glfwPollEvents();
 }

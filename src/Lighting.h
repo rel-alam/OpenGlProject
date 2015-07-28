@@ -40,10 +40,12 @@ public:
 	vec3 m_light_color;
 	vec3 m_material_color;
 
-	std::vector<vec3> m_verticies;
-	std::vector<vec3> m_normals;
+
 
 	float m_specular_power;
+
+	std::vector<vec3> m_verticies;
+	std::vector<vec3> m_normals;
 
 };
 

@@ -32,4 +32,6 @@ void OnWindowResize(GLFWwindow*, int width, int height);
 
 OpenGLData LoadOBJ(char* filename);
 
+void loadTexture(const char* filename, unsigned int &m_texture);
+
 #endif // !ULTILITY_H
